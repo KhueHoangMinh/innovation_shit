@@ -8,11 +8,11 @@ import {useCookies} from 'react-cookie'
 import { Typography, CssBaseline, Grid, Box, Link, Divider, Fade, Grow } from '@mui/material'
 import logo from '../assets/images/logo.png'
 import NET from 'vanta/dist/vanta.net.min'
-import Login from './Login'
-import Register from './Register'
+import Login from './authPage/Login'
+import Register from './authPage/Register'
 
 
-export default function AuthPage() {
+export default function AuthPage(props) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector(state=>state.auth.user)
@@ -23,7 +23,6 @@ export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true)
 
   const handleRegister = ()=> {
-    // navigate('/register')
     setIsLogin(!isLogin)
   }
 
@@ -55,6 +54,7 @@ export default function AuthPage() {
       dispatch(authActions.logout())
       navigate('/')
     }
+
   },[])
   
   useEffect(()=>{
@@ -67,7 +67,7 @@ export default function AuthPage() {
 
 
   return (
-      <React.Fragment sx={{position: "relative"}}>
+      <React.Fragment>
         <CssBaseline/>
         
         <Box ref={bgRef} sx={{width: "100%", height: "100%", position: "absolute"}}>
@@ -76,7 +76,7 @@ export default function AuthPage() {
         <Grid container spacing={0} sx={{ 
             m: 0,
             p: 0,
-            height: "100vh"
+            height: "100%"
             }}>
             <Grid item xs={{display: "none"}} md={6} lg={8} sx={{
                 display: "flex",
@@ -103,7 +103,7 @@ export default function AuthPage() {
 
                     <Box sx={{width: "80%"}}>
                         <Grow sx={{display: isLogin ? "block" : "none"}} in={isLogin}><Box><Login/></Box></Grow>
-                        <Grow sx={{display: !isLogin ? "block" : "none"}} in={!isLogin}><Box><Register/></Box></Grow>
+                        <Grow sx={{display: !isLogin ? "block" : "none"}} in={!isLogin}><Box><Register setIsLogin={setIsLogin}/></Box></Grow>
                     </Box>
 
                     <Divider sx={{width: "80%"}}><span style={{color: "#757575"}}>Or</span></Divider>

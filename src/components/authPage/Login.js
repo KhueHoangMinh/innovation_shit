@@ -1,19 +1,20 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import styled from '@emotion/styled'
 import {useDispatch, useSelector} from 'react-redux'
 import { useState, useEffect } from 'react'
 import {Form, useNavigate} from 'react-router-dom'
-import { authActions } from '../store/auth-slice'
+import { authActions } from '../../store/auth-slice'
 // import { app } from '../firebase'
 // import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
 import Axios from 'axios'
 import {useCookies} from 'react-cookie'
 import { Typography, Stack, Button, Link, FormControl, InputAdornment, IconButton, OutlinedInput, FormControlLabel, InputLabel, Checkbox, FormHelperText } from '@mui/material'
-import googleLogo from '../assets/images/google-logo.svg'
+import googleLogo from '../../assets/images/google-logo.svg'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from 'yup'
 import { Formik } from 'formik'
+import { TransitionContext } from '../TransitionProvider'
 
 
 export default function Login() {
@@ -29,21 +30,25 @@ export default function Login() {
   const [errors,setErrors] = useState()
   const [storedUser, setStoredUser] = useCookies(['user'])
   const bgRef = useRef(null)
+  const Transition = useContext(TransitionContext)
 
   const handleLogin = (e) => {
       e.preventDefault()
-      Axios.post('api/users/login', {email: username, password: password})
-      .then(res=>{
-          if(res.data.rows.length === 1) {
-              const userData = {user_id: res.data.rows[0].user_id, type: res.data.rows[0].type, displayName: res.data.rows[0].name, email: res.data.rows[0].email, photoURL: res.data.rows[0].photourl}
-              dispatch(authActions.login(userData))
-              setStoredUser('User',userData,{path: '/'})
-          } else {
-              setErrors('no_match')
-          }
-      })
+      // Axios.post('api/users/login', {email: username, password: password})
+      // .then(res=>{
+      //     if(res.data.rows.length === 1) {
+      //         const userData = {user_id: res.data.rows[0].user_id, type: res.data.rows[0].type, displayName: res.data.rows[0].name, email: res.data.rows[0].email, photoURL: res.data.rows[0].photourl}
+      //         dispatch(authActions.login(userData))
+      //         setStoredUser('User',userData,{path: '/'})
+      //     } else {
+      //         setErrors('no_match')
+      //     }
+      // })
+      Transition(()=>navigate("/home"))
   }
 
+
+  
   const handleGoogleLogin = () => {
     // signInWithPopup(auth,provider).then((result)=>{
     //     Axios.post('api/users/googlelogin', {email: result.user.email})
@@ -150,7 +155,7 @@ export default function Login() {
                     </Stack>
                     {/* {errors === 'no_match' ? <Error>Email or password does not match.</Error>:<></>}
                     {errors === 'no_account' ? <Error>No account with this email exists.</Error>:<></>} */}
-                    <Button variant='contained' className='normal-login' type='submit'>Login</Button>
+                    <Button variant='contained' className='normal-login' type='submit' onClick={handleLogin}>Login</Button>
                     <Button color={"secondary"} className='google-login' type='button' onClick={handleGoogleLogin}>
                         <img height={"30px"} src={googleLogo}/><span>Login with Google</span>
                       </Button>

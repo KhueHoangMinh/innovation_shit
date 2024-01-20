@@ -3,3 +3,19 @@ body {
   font-family: sans-serif;
   scroll-behavior: smooth;
 }
+
+
+::-webkit-scrollbar {
+  width: 100px;
+  position: absolute;
+  right: 100px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

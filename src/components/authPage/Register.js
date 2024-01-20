@@ -3,22 +3,21 @@ import styled from '@emotion/styled'
 import {useDispatch, useSelector} from 'react-redux'
 import { useState, useEffect } from 'react'
 import {Form, useNavigate} from 'react-router-dom'
-import { authActions } from '../store/auth-slice'
+import { authActions } from '../../store/auth-slice'
 // import { app } from '../firebase'
 // import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
 import Axios from 'axios'
 import {useCookies} from 'react-cookie'
-import { Box, Typography, Stack, Button, Link, FormControl, InputAdornment, IconButton, OutlinedInput, FormControlLabel, InputLabel, Checkbox, FormHelperText, CssBaseline, Stepper, Step, StepLabel, Grid, Divider } from '@mui/material'
-import googleLogo from '../assets/images/google-logo.svg'
+import { Box, Typography, Stack, Button, Link, FormControl, InputAdornment, IconButton, OutlinedInput, FormControlLabel, InputLabel, Checkbox, FormHelperText, CssBaseline, Stepper, Step, StepLabel, Grid, Divider, TextField } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from 'yup'
-import { Formik } from 'formik'
+import { Field, Formik } from 'formik'
 import { usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
 
 
-export default function Register() {
+export default function Register(props) {
   const dispatch = useDispatch()
   const [info,setInfo] = useState({
     basic: {
@@ -31,8 +30,8 @@ export default function Register() {
     card: {
       nameOnCard: "",
       cardNumber: "",
-      expirationDate: "",
-      cvv: "",
+      expiryDate: "",
+      cvc: ""
     }
   })
   const [showPass, setShowPass] = useState(false)
@@ -62,7 +61,7 @@ export default function Register() {
   }
 
   const handleRegister = (e) => {
-    console.log(info)
+    props.setIsLogin(true)
   }
 
   const handleGoogleRegister = () => {
@@ -98,8 +97,8 @@ export default function Register() {
         <Stack direction={"row"} spacing={"20px"} sx={{
             width: "100%"
         }}>
-          <ConfirmItem label={"Expiration date"} content={info.card.expirationDate}/>
-          <ConfirmItem label={"CVV"} content={info.card.cvv.split("").map(()=><>&#183;</>)}/>
+          <ConfirmItem label={"Expiration date"} content={info.card.expiryDate}/>
+          <ConfirmItem label={"CVC"} content={info.card.cvc.split("").map(()=><>&#183;</>)}/>
         </Stack>
         
         
@@ -130,27 +129,45 @@ export default function Register() {
   }
 
   const CreditCard = () => {
+    const {
+      wrapperProps,
+      meta,
+      getCardImageProps,
+      getCardNumberProps,
+      getExpiryDateProps,
+      getCVCProps
+    } = usePaymentInputs();
+
     return (
       <Formik
         initialValues={
           info.card
+          // {cardNumber: "",
+          // expiryDate: "",
+          // cvc: ""}
         }
+
         validationSchema={
           Yup.object().shape({
             nameOnCard: Yup.string()
             .required('Name on card is required')
-            .matches(/^[A-Z\s]+$/, 'Name on card must contain only alphabets and spaces'),
-            cardNumber: Yup.string()
-              .required('Credit card number is required')
-              .matches(/^\d{16}$/, 'Invalid credit card number'),
-            expirationDate: Yup.string()
-              .required('Expiration date is required')
-              .matches(/^(0[1-9]|1[0-2])\/(\d{2})$/, 'Invalid expiration date'),
-            cvv: Yup.string()
-              .required('CVV is required')
-              .matches(/^\d{3,4}$/, 'Invalid CVV'),
+            .matches(/^[a-zA-Z\s]+$/, 'Name on card must contain only alphabets and spaces')
           })
         }
+        
+        validate={() => {
+          let errors = {};
+          if (meta.erroredInputs.cardNumber) {
+            errors.cardNumber = meta.erroredInputs.cardNumber;
+          }
+          if (meta.erroredInputs.expiryDate) {
+            errors.expiryDate = meta.erroredInputs.expiryDate;
+          }
+          if (meta.erroredInputs.cvc) {
+            errors.cvc = meta.erroredInputs.cvc;
+          }
+          return errors;
+        }}
         onSubmit={async (values, {setErrors, setStatus, setSubmitting}) => {
           try {
             // setStatus({success: true})
@@ -170,6 +187,7 @@ export default function Register() {
               <Stack direction={"column"} spacing={"20px"} sx={{
                   width: "100%"
               }}>
+
                 <FormControl error={Boolean(touched.nameOnCard && errors.nameOnCard)}>
                   <InputLabel>Name on Card</InputLabel>
                   <OutlinedInput
@@ -188,63 +206,82 @@ export default function Register() {
                   )}
                 </FormControl>
 
-                <FormControl error={Boolean(touched.cardNumber && errors.cardNumber)}>
-                  <InputLabel>Card number</InputLabel>
-                  <OutlinedInput
-                    type={'text'}
-                    id={'cardNumber'}
-                    name={'cardNumber'}
-                    value={values.cardNumber}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    label={"Card number"}
-                  />
-                  {touched.cardNumber && errors.cardNumber && (
-                    <FormHelperText error>
-                      {errors.cardNumber}
-                    </FormHelperText>
+                
+                <Field name="cardNumber">
+                  {({ field }) => (
+                    <TextField
+                      {...getCardNumberProps({
+                        refKey: "inputRef",
+                        onBlur: field.onBlur, onChange: field.onChange, name: field.name, id: field.id
+                      })}
+                      inputRef={getCardNumberProps().ref}
+                      fullWidth
+                      type="tel"
+                      label="Card number"
+                      variant="outlined"
+                      error={
+                        Boolean(touched.cardNumber && errors.cardNumber)
+                      }
+                      helperText={
+                        touched.cardNumber && errors.cardNumber && (errors.cardNumber)
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <svg {...getCardImageProps({ images })} />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
                   )}
-                </FormControl>
+                </Field>
                 
                 <Stack direction={"row"} spacing={"20px"} sx={{
                     width: "100%"
                 }}>
-
-                  <FormControl error={Boolean(touched.expirationDate && errors.expirationDate)}>
-                    <InputLabel>Expiration date</InputLabel>
-                    <OutlinedInput
-                      type={'text'}
-                      id={'expirationDate'}
-                      name={'expirationDate'}
-                      value={values.expirationDate}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      label={"Expiration date"}
-                    />
-                    {touched.expirationDate && errors.expirationDate && (
-                      <FormHelperText error>
-                        {errors.expirationDate}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
                   
-                  <FormControl error={Boolean(touched.cvv && errors.cvv)}>
-                    <InputLabel>CVV</InputLabel>
-                    <OutlinedInput
-                      type={'text'}
-                      id={'cvv'}
-                      name={'cvv'}
-                      value={values.cvv}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      label={"CVV"}
-                    />
-                    {touched.cvv && errors.cvv && (
-                      <FormHelperText error>
-                        {errors.cvv}
-                      </FormHelperText>
+                  <Field name="expiryDate">
+                    {({ field }) => (
+                      
+                      <TextField
+                        {...getExpiryDateProps({
+                          refKey: "inputRef",
+                          onBlur: field.onBlur, onChange: field.onChange, name: field.name, id: field.id
+                        })}
+                        inputRef={getExpiryDateProps().ref}
+                        fullWidth
+                        type="tel"
+                        label={"Expiration date"}
+                        variant="outlined"
+                        error={Boolean(touched.expirationDate && errors.expirationDate)}
+                        helperText={
+                          touched.expirationDate && errors.expirationDate && (errors.expirationDate)
+                        }
+                      />
                     )}
-                  </FormControl>
+                  </Field>
+                  
+                  <Field name="cvc">
+                    {({ field }) => (
+                      <TextField
+                        {...getCVCProps({
+                          refKey: "inputRef",
+                          onBlur: field.onBlur, onChange: field.onChange, name: field.name, id: field.id
+                        })}
+                        inputRef={getCVCProps().ref}
+                        fullWidth
+                        type="text"
+                        label={"CVC"}
+                        placeholder='CVC'
+                        variant="outlined"
+                        error={Boolean(touched.cvc && errors.cvc)}
+                        helperText={
+                          touched.cvc && errors.cvc && (errors.cvc)
+                        }
+                      />
+                    )}
+                  </Field>
+                  
                 </Stack>
 
                 <Stack direction={"row"} sx={{mt: "10px", alignItems: "center", justifyContent: "space-between"}}>
@@ -328,7 +365,7 @@ export default function Register() {
               <Stack direction={"row"} spacing={"20px"} sx={{
                   width: "100%"
               }}>
-                <FormControl error={Boolean(touched.firstName && errors.firstName)}>
+                <FormControl sx={{width: "100%"}} error={Boolean(touched.firstName && errors.firstName)}>
                   <InputLabel>First name</InputLabel>
                   <OutlinedInput
                     type={'text'}
@@ -346,7 +383,7 @@ export default function Register() {
                   )}
                 </FormControl>
                 
-                <FormControl error={Boolean(touched.lastName && errors.lastName)}>
+                <FormControl sx={{width: "100%"}} error={Boolean(touched.lastName && errors.lastName)}>
                   <InputLabel>Last name</InputLabel>
                   <OutlinedInput
                     type={'text'}

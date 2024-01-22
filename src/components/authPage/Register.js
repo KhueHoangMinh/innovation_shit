@@ -93,7 +93,7 @@ export default function Register(props) {
         <Typography sx={{mt: "20px"}} variant='h5'>Credit Card</Typography>
         <Divider sx={{my: "10px"}}></Divider>
         <ConfirmItem label={"Name on Card"} content={info.card.nameOnCard}/>
-        <ConfirmItem label={"Card number"} content={info.card.cardNumber}/>
+        <ConfirmItem label={"Card number"} content={info.card.cardNumber.split("").map((v,i)=><>{(i >= 0 && i < 4) || (i >= info.card.cardNumber.length - 4 && i < info.card.cardNumber.length) ? <>{info.card.cardNumber[i]}</> : <>&#183;</>}{(i + 1) % 4 == 0 ? <>&#160;</> : <></>}</>)}/>
         <Stack direction={"row"} spacing={"20px"} sx={{
             width: "100%"
         }}>

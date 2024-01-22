@@ -1,5 +1,5 @@
-import React, { createContext } from 'react';
-import {BrowserRouter, Routes, Route, useNavigate} from 'react-router-dom'
+import React from 'react';
+import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom'
 
 import AuthPage from './components/AuthPage';
 import HomePage from './components/HomePage';
@@ -12,22 +12,20 @@ import HomePage from './components/HomePage';
 // import Checkout from './components/Checkout';
 // import Receipt from './components/Receipt';
 import {CookiesProvider} from 'react-cookie'
-import theme, { CustomStyle } from './colorTheme';
-import { Box, ThemeProvider } from '@mui/material';
+import theme from './colorTheme';
+import { CssBaseline, Stack, ThemeProvider } from '@mui/material';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
 import TransitionProvider from './components/TransitionProvider';
+import 'overlayscrollbars/overlayscrollbars.css';
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import ErrorPage from './components/ErrorPage';
+import MainLayout from './components/MainLayout';
 
 const AppWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-  
 `
-
 
 function App() {
 
@@ -35,21 +33,44 @@ function App() {
     <CookiesProvider>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-            <TransitionProvider duration={1000}>
-              <AppWrapper>
+          <CssBaseline/>
+          <TransitionProvider duration={400}>
+            <AppWrapper sx={{backgroundColor: "primary.main"}}>
+              <OverlayScrollbarsComponent defer options={{
+                overflow: {
+                  x: 'hidden',
+                  y: 'scroll',
+                },
+                scrollbars: {
+                  theme: 'os-theme-light',
+                  visibility: 'auto',
+                  autoHide: 'never',
+                  autoHideDelay: 1300,
+                  autoHideSuspend: false,
+                  dragScroll: true,
+                  clickScroll: false,
+                  pointers: ['mouse', 'touch', 'pen'],
+                },
+              }} style={{height: "100%"}}>
                 <Routes>
-                  <Route path='/' element={<AuthPage/>}/>
-                  <Route path='/home' element={<><HomePage/></>}/>
-                  {/* 
-                  <Route path='/about' element={<><Header/><About/></>}/>
-                  <Route path='/market' element={<><Header/><Market/></>}/>
-                  <Route path='/market/:productId' element={<><Header/><MarketProduct/></>}/>
-                  <Route path='/user' element={<><Header/><UserPage/></>}/>
-                  <Route path='/checkout' element={<><Header/><Checkout/></>}/>
-                  <Route path='/receipt' element={<><Header/><Receipt/></>}/> */}
+                    <Route path='/' element={<><HomePage/></>}/>
+                    <Route path='/auth' element={<AuthPage/>}/>
+
+                    <Route path="/:userId" element={<>
+                        {/* <Header/>
+                        <Stack direction={"row"} spacing={0} sx={{width: "100%", height: "100%"}}>
+                          <SideBar/>
+                          <Outlet/>
+                        </Stack> */}
+                        <MainLayout/>
+                    </>}>
+                      <Route path="/:userId/" element={<HomePage/>}/>
+                    </Route>
+                  <Route path='*' element={<ErrorPage/>} />
                 </Routes>
-              </AppWrapper>
-            </TransitionProvider>
+              </OverlayScrollbarsComponent>
+            </AppWrapper>
+          </TransitionProvider>
         </BrowserRouter>
       </ThemeProvider>
     </CookiesProvider>

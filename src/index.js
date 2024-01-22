@@ -8,21 +8,21 @@ import store from './store'
 import io from 'socket.io-client'
 
 // window.baseHost = 'https://tradey-387014.el.r.appspot.com/'
-window.baseHost = 'http://192.168.6.60:3001/'
+// window.baseHost = 'http://192.168.6.60:3001/'
 
-window.host = window.baseHost
+// window.host = window.baseHost
 
-window.socket = null
-if(!window.socket) window.socket = io.connect(window.baseHost, 
-  {
-    // path: "/tradey-backend/us-central1/server/socket.io",
-    withCredentials: true,
-    // extraHeaders: {
-    //   "my-custom-header": "abcd"
-    // }
-  }
-)
-console.log(window.socket)
+// window.socket = null
+// if(!window.socket) window.socket = io.connect(window.baseHost, 
+//   {
+//     // path: "/tradey-backend/us-central1/server/socket.io",
+//     withCredentials: true,
+//     // extraHeaders: {
+//     //   "my-custom-header": "abcd"
+//     // }
+//   }
+// )
+// console.log(window.socket)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

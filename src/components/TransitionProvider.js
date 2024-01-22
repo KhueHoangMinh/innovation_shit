@@ -3,9 +3,8 @@ import { TrainSharp } from '@mui/icons-material'
 import React, {createContext, useEffect, useRef, useState} from 'react'
 
 const TransitionContext = createContext(
-    (callback) => {
-        console.log("not passed")
-        callback()
+    async (callback) => {
+        await callback()
     }
 )
 
@@ -15,8 +14,8 @@ function TransitionProvider(props) {
     const Transition = (callback) => {
         // setBrightness(0)
         wrapperRef.current.style.filter = "brightness(0)"
-        setTimeout(()=>{
-            callback()
+        setTimeout(async ()=>{
+            await callback()
             wrapperRef.current.style.filter = "brightness(1)"
         },props.duration)
     }

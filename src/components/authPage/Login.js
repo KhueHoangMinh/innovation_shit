@@ -44,7 +44,7 @@ export default function Login() {
       //         setErrors('no_match')
       //     }
       // })
-      Transition(()=>navigate("/home"))
+      Transition(()=>navigate("/0/"))
   }
 
 

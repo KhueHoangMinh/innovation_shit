@@ -15,7 +15,7 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import Header from './Header'
 import { useDispatch, useSelector } from 'react-redux';
 import { barActions } from '../store/sidebar-slice';
-import { Drawer, useMediaQuery } from '@mui/material';
+import { Drawer, Stack, useMediaQuery } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -51,46 +51,66 @@ const closedMixin = (theme) => ({
 
 const CustomDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open, applyresize, isdesktop }) => ({
-        ...(applyresize ? {
-            width: drawerWidth,
-        }: {
-            width: `calc(${theme.spacing(7)} + 1px)`,
-            [theme.breakpoints.up('sm')]: {
-              width: `calc(${theme.spacing(8)} + 1px)`,
-            },
-        }),
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
+    ...(applyresize ? {
+        width: drawerWidth,
+    }: {
+        width: `calc(${theme.spacing(7)} + 1px)`,
+        [theme.breakpoints.up('sm')]: {
+          width: `calc(${theme.spacing(8)} + 1px)`,
+        },
+    }),
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': {
             ...openedMixin(theme),
-            '& .MuiDrawer-paper': {
-                ...openedMixin(theme),
-            }
-                
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': {
-                ... closedMixin(theme),
-            }
-        }),
+        }
+            
+    }),
+    ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': {
+            ... closedMixin(theme),
+        }
+    }),
 
-        
-        ...(!isdesktop && {
-            position: "absolute",
+    
+    ...(!isdesktop && {
+        position: "absolute",
+        width: drawerWidth,
+        '& .MuiDrawer-paper': {
+            transition: theme.transitions.create( "margin", {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
             width: drawerWidth,
-            '& .MuiDrawer-paper': {
-                transition: theme.transitions.create( "margin", {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                width: drawerWidth,
-                marginLeft: open ? "0px" : "-" + drawerWidth + "px",
-            },
-        })
-      })
-    );
+            marginLeft: open ? "0px" : "-" + drawerWidth + "px",
+        },
+    })
+  })
+);
+
+    
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }),
+);
 
 export default function MainLayout() {
   const theme = useTheme();
@@ -187,9 +207,11 @@ export default function MainLayout() {
         </List>
         </OverlayScrollbarsComponent>
       </CustomDrawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{flexGrow: 1, minWidth: 0, p: 3, position: "relative", float: "right"}}>
         <DrawerHeader />
-        <Outlet/>
+        <Stack direction={"column"} spacing={"30px"} sx={{width: "100%"}}>
+          <Outlet/>
+        </Stack>
       </Box>
     </Box>
   );

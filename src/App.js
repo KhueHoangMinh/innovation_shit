@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 import AuthPage from './components/AuthPage';
 import HomePage from './components/HomePage';
@@ -13,7 +13,7 @@ import HomePage from './components/HomePage';
 // import Receipt from './components/Receipt';
 import {CookiesProvider} from 'react-cookie'
 import theme from './colorTheme';
-import { CssBaseline, Stack, ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import styled from '@emotion/styled';
 import TransitionProvider from './components/TransitionProvider';
 import 'overlayscrollbars/overlayscrollbars.css';
@@ -51,17 +51,12 @@ function App() {
                   clickScroll: false,
                   pointers: ['mouse', 'touch', 'pen'],
                 },
-              }} style={{height: "100%"}}>
+              }} style={{width: "100%", height: "100%"}}>
                 <Routes>
                     <Route path='/' element={<><HomePage/></>}/>
                     <Route path='/auth' element={<AuthPage/>}/>
 
                     <Route path="/:userId" element={<>
-                        {/* <Header/>
-                        <Stack direction={"row"} spacing={0} sx={{width: "100%", height: "100%"}}>
-                          <SideBar/>
-                          <Outlet/>
-                        </Stack> */}
                         <MainLayout/>
                     </>}>
                       <Route path="/:userId/" element={<HomePage/>}/>

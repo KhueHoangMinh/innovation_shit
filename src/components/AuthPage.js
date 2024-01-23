@@ -12,6 +12,7 @@ import Login from './authPage/Login'
 import Register from './authPage/Register'
 import * as SpaceWar from '../assets/animations/spacewar.json'
 import Lottie from 'react-lottie'
+import { CarouselCard } from './common/Card';
 
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,7 +21,20 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
 
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, EffectCoverflow} from 'swiper/modules';
+
+
+const GradientBg = styled.div`
+
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  background: radial-gradient(ellipse at top, #366fa4, transparent),
+                radial-gradient(ellipse at bottom, #37a76f, transparent),
+                radial-gradient(ellipse at left, #464fa5, transparent),
+                radial-gradient(ellipse at right, #964392, transparent);
+`
 
 
 export default function AuthPage(props) {
@@ -84,34 +98,24 @@ export default function AuthPage(props) {
 },[user])
 
 
+
   return (
       <React.Fragment>
-        <Box ref={bgRef} sx={{width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", backgroundColor: "#202020"}}>
-        <Swiper
-          style={{height: "100%", width: "100%", padding: "300px"}}
-          grabCursor={true}
-          centeredSlides={true}
-          loop={true}
-          freeMode={true}
-          slidesPerView={3}
-          spaceBetween={30}
-          autoplay={{
-            delay: 1000,
-            disableOnInteraction: false,
-          }}
-          pagination={false}
-          modules={[Autoplay]}
-          className="mySwiper"
-        >
-          {[...Array(10)].map(()=>(
-            <SwiperSlide isA style={{width: "100%", height: "100%", borderRadius: "20px", position: "relative", overflow: "hidden"}}>
-              {/* {({ isActive }) => (
-              )} */}
-              <img style={{width: "100%", height: "100%"}} src={`https://picsum.photos/200?random=${Math.random(1,10)}`} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        </Box>
+        <GradientBg>
+          {/* <Lottie 
+            options={{
+              loop: true,
+              autoplay: true,
+              animationData: SpaceWar
+            }}
+            style={{
+              width: "100vw",
+              height: "auto"
+            }}
+          /> */}
+          
+          {/* <img src={loginbg} style={{width: "100%", height: "100%",objectFit: "cover", filter: "brightness(0.3)"}}/> */}
+        </GradientBg>
         <Grid container spacing={0} sx={{ 
             m: 0,
             p: 0,
@@ -120,24 +124,56 @@ export default function AuthPage(props) {
             <Grid item xs={{display: "none"}} md={6} lg={8} sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
+                flexDirection: "column"
 
             }}>
-                {/* <Box sx={{width: "70%", height: "70%" ,zIndex: 2, position: "relative", overflowX: "visible"}}>
-                    <Typography color={"primary.light"} sx={{textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
-                    <Typography color={"primary.dark"}sx={{textAlign: "center"}} variant='h4'>Exclusiveness is what you deserve!</Typography>
-                </Box> */}
+                <Typography sx={{color: "primary.light", textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
+                <Box sx={{width: "70%", height: "70%" ,zIndex: 2, position: "relative", overflowX: "visible"
+                }}>
+                  <Swiper
+                    style={{height: "100%", width: "calc(100% + 200vw)", padding: "20px 100vw", marginLeft: "-100vw", position: "absolute"}}
+                    effect={'coverflow'}
+                    centeredSlides={true}
+                    loop={true}
+                    lazy={true}
+                    lazyPreloadPrevNext={4}
+                    autoplay={{
+                      delay: 5000,
+                      disableOnInteraction: true
+                    }}
+                    slidesPerView={1}
+                    spaceBetween={"-40%"}
+                    coverflowEffect={{
+                      rotate: 70,
+                      stretch: 0,
+                      depth: 0,
+                      modifier: 1,
+                      slideShadows: true,
+                      scale: 0.7,
+                    }}
+                    modules={[EffectCoverflow, Autoplay]}
+                    className="mySwiper"
+                  >
+                    {[...Array(10)].map(()=>(
+                      <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", borderRadius: "20px", position: "relative", overflow: "hidden", boxShadow: "3px 3px 15px 5px rgba(0,0,0,0.6)"}}>
+                      < CarouselCard/>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </Box>
+                <Typography sx={{color: "primary.light",textAlign: "center"}} variant='h4'>Exclusiveness is what you deserve!</Typography>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <Box sx={{
-                    bgcolor: "rgba(0,0,0,0.5)",
+                    bgcolor: "rgba(0,0,0,0.8)",
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "space-around",
                     position: "relative",
-                    backdropFilter: "blur(10px)",
+                    backdropFilter: "blur(5px)",
                     zIndex: 10
                     }}>
                     <img height={"120px"} style={{objectFit: "contain"}} src={logo} alt='Lux'/>

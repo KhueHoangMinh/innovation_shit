@@ -4,64 +4,16 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Carousel from 'react-material-ui-carousel';
-import { Paper, Button, Stack, Chip } from '@mui/material'
+import { Paper, Button, Stack, Chip, Grid, Link } from '@mui/material'
 import styled from '@emotion/styled';
+import { Card, CarouselCard } from './common/Card';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import { List } from './common/List';
 
-
-function CarouselCard(props) {
-  const imgAPI = `https://picsum.photos/200?random=${Math.random(1,10)}`
-  const CardContainer = styled.div`
-    position: relative;
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-
-    &::after {
-      content: "";
-      display: block;
-      padding-bottom:
-       100%;
-    }
-
-    & > div {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      top: 0;
-      left: 0;
-
-      img {
-        position: absolute;
-        transition: 0.2s ease-in-out;
-        transform-origin: middle middle;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-      }
-    }
-
-    &:hover {
-      cursor: pointer;
-      img {
-        transform: scale(1.1);
-      }
-    }
-  `
-
-  return(
-    <CardContainer>
-      <div>
-        <img src={imgAPI}/>
-        <Box sx={{position: "absolute", height: "fit-content", width: "100%", bottom: 0, padding: "10px", background: "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))"}}>
-          <Typography variant='h6'>Product 1</Typography>
-          <Typography variant='body1'>abcd</Typography>
-        </Box>
-      </div>
-    </CardContainer>
-  )
-
-}
 
 function HomePage(props) {
 
@@ -75,41 +27,43 @@ function HomePage(props) {
     "Music"]
 
   return (
-    <Box>
-      <Stack direction={"row"} sx={{mb: "30px"}}>
+    <>
+      <Stack direction={"row"} sx={{}}>
         {chips.map((chip)=>(
           <>
             <Chip label={chip} color={"primary"} variant="outlined" onClick={()=>{console.log("click chip")}} sx={{marginRight: "10px", fontWeight: "600px"}}/>
           </>
         ))}
       </Stack>
-      <Carousel duration={800} animation={"slide"} indicators={false} sx={{mb: "30px"}}>
-        <Stack spacing={"20px"} direction={"row"} sx={{width: "100%", height: "fit-content"}}>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-        </Stack>
-        <Stack spacing={"20px"} direction={"row"} sx={{width: "100%", height: "fit-content"}}>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-        </Stack>
-        <Stack spacing={"20px"} direction={"row"} sx={{width: "100%", height: "fit-content"}}>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-        </Stack>
-        <Stack spacing={"20px"} direction={"row"} sx={{width: "100%", height: "fit-content"}}>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-          <CarouselCard/>
-        </Stack>
-      </Carousel>
-    </Box>
+      
+      <Box 
+          sx={{width: "100%"}}>
+        <Swiper
+          style={{width: "100%"}}
+          loop={true}
+          lazy={true}
+          lazyPreloadPrevNext={4}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: true
+          }}
+          slidesPerView={4}
+          spaceBetween={"20px"}
+          modules={[Autoplay]}
+          className="mySwiper"
+        >
+          {[...Array(10)].map(()=>(
+            <SwiperSlide style={{backgroundColor: "#121212", height: "fit-content", position: "relative", overflow: "hidden"}}>
+              <CarouselCard/>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
+      
+      <List title={"Category 1"} link={''} items={[...Array(10)]}/>
+      <List title={"Category 2"} link={''} items={[...Array(6)]}/>
+      <List title={"Category 3"} link={''} items={[...Array(6)]}/>
+    </>
   );
 }
 

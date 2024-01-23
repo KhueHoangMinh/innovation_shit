@@ -102,19 +102,6 @@ export default function AuthPage(props) {
   return (
       <React.Fragment>
         <GradientBg>
-          {/* <Lottie 
-            options={{
-              loop: true,
-              autoplay: true,
-              animationData: SpaceWar
-            }}
-            style={{
-              width: "100vw",
-              height: "auto"
-            }}
-          /> */}
-          
-          {/* <img src={loginbg} style={{width: "100%", height: "100%",objectFit: "cover", filter: "brightness(0.3)"}}/> */}
         </GradientBg>
         <Grid container spacing={0} sx={{ 
             m: 0,
@@ -129,10 +116,23 @@ export default function AuthPage(props) {
 
             }}>
                 <Typography sx={{color: "primary.light", textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
-                <Box sx={{width: "70%", height: "70%" ,zIndex: 2, position: "relative", overflowX: "visible"
+                <Box sx={{
+                  width: "50%" ,zIndex: 2, position: "relative", overflowX: "visible", 
+                  "&::after" : {
+                    content: '""',
+                    pt: "100%",
+                    display: "block"
+                  },
+                  // "& .swiper-slide": {
+                  //   transition: "0.5s",
+                  //   opacity: 0.3
+                  // },
+                  // "& .swiper-slide-active": {
+                  //   opacity: 1
+                  // }
                 }}>
                   <Swiper
-                    style={{height: "100%", width: "calc(100% + 200vw)", padding: "20px 100vw", marginLeft: "-100vw", position: "absolute"}}
+                    style={{height: "100%", width: "calc(100% - 40px + 200vw)", padding: "20px 100vw", marginLeft: "-100vw", position: "absolute"}}
                     effect={'coverflow'}
                     centeredSlides={true}
                     loop={true}
@@ -147,17 +147,17 @@ export default function AuthPage(props) {
                     coverflowEffect={{
                       rotate: 70,
                       stretch: 0,
-                      depth: 0,
-                      modifier: 1,
+                      depth: 100,
+                      modifier: 0.6,
                       slideShadows: true,
-                      scale: 0.7,
+                      scale: 0.5,
                     }}
                     modules={[EffectCoverflow, Autoplay]}
                     className="mySwiper"
                   >
                     {[...Array(10)].map(()=>(
                       <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", borderRadius: "20px", position: "relative", overflow: "hidden", boxShadow: "3px 3px 15px 5px rgba(0,0,0,0.6)"}}>
-                      < CarouselCard/>
+                        <CarouselCard/>
                       </SwiperSlide>
                     ))}
                   </Swiper>

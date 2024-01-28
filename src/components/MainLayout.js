@@ -10,12 +10,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import Header from './Header'
 import { useDispatch, useSelector } from 'react-redux';
 import { barActions } from '../store/sidebar-slice';
-import { Drawer, Stack, useMediaQuery } from '@mui/material';
+import { Drawer, Fade, Stack, useMediaQuery } from '@mui/material';
+import { useContext } from 'react';
+import { TransitionContext } from './TransitionProvider';
 
 const drawerWidth = 240;
 
@@ -92,27 +94,7 @@ const CustomDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'ope
   })
 );
 
-    
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  }),
-);
-
-export default function MainLayout() {
+export default function MainLayout(props) {
   const theme = useTheme();
   const dispatch = useDispatch()
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"))
@@ -121,7 +103,36 @@ export default function MainLayout() {
 
   const barOpen = barState.isOpenning ? barState.isOpenning : barState.isOpenningTemp
 
-  console.log(barOpen)
+  const navigate = useNavigate()
+  const Transition = useContext(TransitionContext)
+
+  const handleItemClick = (link) => {
+    Transition(()=>{navigate(link)})
+  }
+
+  const [menuItems, setMenuItems] = React.useState([
+    {
+      label: "Home",
+      link: "/0"
+    },
+    {
+      label: "Gallery",
+      link: "/0/gallery"
+    },
+    {
+      label: "Search",
+      link: "/0/search"
+    },
+    {
+      label: "divider",
+      link: ""
+    },
+    {
+      label: "Account",
+      link: "/0/account"
+    }
+  ])
+
   return (
     <Box sx={{ display: 'flex' }}>
         
@@ -138,73 +149,61 @@ export default function MainLayout() {
         onMouseEnter={()=>{if(isDesktop && !barState.isOpenning && !barState.isOpenningTemp) dispatch(barActions.setBarStateTemp(true))}} 
         onMouseLeave={()=>{if(isDesktop && !barState.isOpenning && barState.isOpenningTemp) dispatch(barActions.setBarStateTemp(false))}} 
       >
-        <OverlayScrollbarsComponent defer options={{
-        overflow: {
-            x: 'hidden',
-            y: 'scroll',
-        },
-        scrollbars: {
-            theme: 'os-theme-light',
-            visibility: 'auto',
-            autoHide: 'leave',
-            autoHideDelay: 300,
-            autoHideSuspend: false,
-            dragScroll: true,
-            clickScroll: false,
-            pointers: ['mouse', 'touch', 'pen'],
-        },
-        }} style={{height: "100%"}}>
-        <DrawerHeader/>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: barOpen ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: barOpen ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: barOpen ? 1 : 0, transition: "opacity 0.2s ease-in-out" }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam', 'Trashh', 'Spamm'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: barOpen ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: barOpen ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: barOpen ? 1 : 0, transition: "opacity 0.2s ease-in-out" }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <OverlayScrollbarsComponent 
+          defer 
+          options={{
+            overflow: {
+                x: 'hidden',
+                y: 'scroll',
+            },
+            scrollbars: {
+                theme: 'os-theme-light',
+                visibility: 'auto',
+                autoHide: 'leave',
+                autoHideDelay: 300,
+                autoHideSuspend: false,
+                dragScroll: true,
+                clickScroll: false,
+                pointers: ['mouse', 'touch', 'pen'],
+            },
+          }} style={{height: "100%"}}
+        >
+          <DrawerHeader/>
+          <Divider />
+          <List>
+            {menuItems.map((item, index) => (
+              <>
+              {
+                item.label === "divider" ? <>
+                  <Divider/>
+                </> : <>
+                  <ListItem key={index} onClick={()=>{handleItemClick(item.link)}} disablePadding sx={{ display: 'block' }}>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: barState ? 'initial' : 'center',
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: barState ? 3 : 'auto',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      </ListItemIcon>
+                      <Fade in={barState}>
+                        <ListItemText primary={item.label} />
+                      </Fade>
+                    </ListItemButton>
+                  </ListItem>
+                </>
+              }
+              </>
+            ))}
+          </List>
         </OverlayScrollbarsComponent>
       </CustomDrawer>
       <Box component="main" sx={{flexGrow: 1, minWidth: 0, p: 3, position: "relative", float: "right"}}>

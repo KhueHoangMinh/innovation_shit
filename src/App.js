@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 import AuthPage from './components/AuthPage';
@@ -20,6 +20,9 @@ import 'overlayscrollbars/overlayscrollbars.css';
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import ErrorPage from './components/ErrorPage';
 import MainLayout from './components/MainLayout';
+import ScrollWrapper from './components/common/ScrollWrapper';
+import ProductPage from './components/ProductPage';
+import GalleryPage from './components/GalleryPage';
 
 const AppWrapper = styled.div`
   width: 100vw;
@@ -36,34 +39,20 @@ function App() {
           <CssBaseline/>
           <TransitionProvider duration={400}>
             <AppWrapper sx={{backgroundColor: "primary.main"}}>
-              <OverlayScrollbarsComponent defer options={{
-                overflow: {
-                  x: 'hidden',
-                  y: 'scroll',
-                },
-                scrollbars: {
-                  theme: 'os-theme-light',
-                  visibility: 'auto',
-                  autoHide: 'never',
-                  autoHideDelay: 1300,
-                  autoHideSuspend: false,
-                  dragScroll: true,
-                  clickScroll: false,
-                  pointers: ['mouse', 'touch', 'pen'],
-                },
-              }} style={{width: "100%", height: "100%"}}>
+              <ScrollWrapper>
                 <Routes>
-                    <Route path='/' element={<><HomePage/></>}/>
-                    <Route path='/auth' element={<AuthPage/>}/>
-
+                    {/* <Route path='/' element={<><HomePage/></>}/> */}
+                    <Route path='/' element={<AuthPage/>}/>
                     <Route path="/:userId" element={<>
-                        <MainLayout/>
+                      <MainLayout/>
                     </>}>
                       <Route path="/:userId/" element={<HomePage/>}/>
+                      <Route path="/:userId/gallery/" element={<GalleryPage/>}/>
+                      <Route path="/:userId/gallery/:itemId" element={<ProductPage/>}/>
                     </Route>
                   <Route path='*' element={<ErrorPage/>} />
                 </Routes>
-              </OverlayScrollbarsComponent>
+              </ScrollWrapper>
             </AppWrapper>
           </TransitionProvider>
         </BrowserRouter>

@@ -20,6 +20,29 @@ function SideBar(props) {
   const theme = useTheme();
   const barState = useSelector(state => state.barState.isOpenning)
 
+  const [menuItems, setMenuItems] = useState([
+    {
+      label: "Home",
+      link: "/home"
+    },
+    {
+      label: "Gallery",
+      link: "/gallery"
+    },
+    {
+      label: "Search",
+      link: "/search"
+    },
+    {
+      label: "divider",
+      link: ""
+    },
+    {
+      label: "Account",
+      link: "/account"
+    }
+  ])
+
   const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
       width: props.drawerWidth,
@@ -80,56 +103,37 @@ const closedMixin = (theme) => ({
       {/* {props.DrawerHeader} */}
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: barState ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: barState ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <Fade in={barState}>
-                <ListItemText primary={text} />
-              </Fade>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: barState ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: barState ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <Fade in={barState}>
-                <ListItemText primary={text} />
-              </Fade>
-            </ListItemButton>
-          </ListItem>
+        {menuItems.map((item, index) => (
+          <>
+          {
+            item.label === "divider" ? <>
+              <Divider/>
+            </> : <>
+              <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: barState ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: barState ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <Fade in={barState}>
+                    <ListItemText primary={item} />
+                  </Fade>
+                </ListItemButton>
+              </ListItem>
+            </>
+          }
+          </>
         ))}
       </List>
       </OverlayScrollbarsComponent>

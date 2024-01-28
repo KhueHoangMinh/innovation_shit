@@ -3,6 +3,9 @@ import { Box, Grid, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { createAvatar } from '@dicebear/core';
 import { lorelei, botttsNeutral } from '@dicebear/collection';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { TransitionContext } from '../TransitionProvider';
 
 function makeid(length) {
   let result = '';
@@ -26,6 +29,7 @@ async function getImage() {
 
   return img;
 }
+
 
 function CarouselCard(props) {
 
@@ -200,9 +204,16 @@ function Card(props) {
       box-shadow: 0px 0px 15px rgba(0,0,0,0.6);
     }
   `
+  
+  const navigate = useNavigate()
+  const Transition = useContext(TransitionContext)
+
+  const handleItemClick = (link) => {
+    Transition(()=>{navigate(link)})
+  }
 
   return (
-    <Card>
+    <Card onClick={()=>{handleItemClick("/0/gallery/0")}}>
       <div>
         <Box>
           <img src={imgAPI}/>

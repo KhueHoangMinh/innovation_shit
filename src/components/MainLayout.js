@@ -216,7 +216,7 @@ export default function MainLayout(props) {
       </CustomDrawer>
       <Box component="main" sx={{flexGrow: 1, minWidth: 0, p: 3, position: "relative", float: "right"}}>
         <DrawerHeader />
-        <Stack direction={"column"} spacing={"30px"} sx={{width: "100%"}}>
+        <Stack direction={"column"} spacing={"30px"} sx={{width: "100%", minHeight: "100vh"}}>
           <Outlet/>
         </Stack>
         <Footer/>

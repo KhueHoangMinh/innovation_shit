@@ -17,7 +17,6 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import styled from '@emotion/styled';
 import TransitionProvider from './components/TransitionProvider';
 import 'overlayscrollbars/overlayscrollbars.css';
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import ErrorPage from './components/ErrorPage';
 import MainLayout from './components/MainLayout';
 import ScrollWrapper from './components/common/ScrollWrapper';

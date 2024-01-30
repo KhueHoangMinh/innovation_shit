@@ -13,7 +13,10 @@ function List(props) {
     <Box sx={{width: "100%"}}>
         <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center", mb: "10px"}}>
           <Typography variant='h4' sx={{fontWeight: "800"}}>{props.title}</Typography>
-          <Button variant='text' onClick={()=>{Transition(()=>{navigate(props.link)})}}>View all</Button>
+          <Button variant='text' onClick={()=>{Transition(()=>{navigate(
+            // props.link
+            "/0/gallery"
+            )})}}>View all</Button>
         </Stack>
         <Grid container spacing={"20px"}>
           {props.items.map(()=>(

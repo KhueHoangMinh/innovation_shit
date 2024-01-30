@@ -6,16 +6,8 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { CarouselCard } from './Card';
-import { useTheme } from '@emotion/react';
 
 function Slider() {
-    const theme = useTheme();
-    // const isLG = useMediaQuery(theme.breakpoints.up("lg"))
-    // const isMD = useMediaQuery(theme.breakpoints.up("md"))
-    // const isSM = useMediaQuery(theme.breakpoints.up("sm"))
-    // const isXS = useMediaQuery(theme.breakpoints.up("xs"))
-
-    
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
     function getWindowDimensions() {

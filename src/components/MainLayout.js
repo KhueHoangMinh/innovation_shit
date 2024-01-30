@@ -18,6 +18,11 @@ import { barActions } from '../store/sidebar-slice';
 import { Drawer, Fade, Stack, useMediaQuery } from '@mui/material';
 import { useContext } from 'react';
 import { TransitionContext } from './TransitionProvider';
+import Footer from './Footer';
+import HomeIcon from '@mui/icons-material/Home';
+import AppsIcon from '@mui/icons-material/Apps';
+import SearchIcon from '@mui/icons-material/Search';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -113,23 +118,26 @@ export default function MainLayout(props) {
   const [menuItems, setMenuItems] = React.useState([
     {
       label: "Home",
-      link: "/0"
+      link: "/0",
+      logo: <HomeIcon/>
     },
     {
       label: "Gallery",
-      link: "/0/gallery"
+      link: "/0/gallery",
+      logo: <AppsIcon/>
     },
     {
       label: "Search",
-      link: "/0/search"
+      link: "/0/search",
+      logo: <SearchIcon/>
     },
     {
       label: "divider",
-      link: ""
     },
     {
       label: "Account",
-      link: "/0/account"
+      link: "/0/account",
+      logo: <AccountCircleIcon/>
     }
   ])
 
@@ -192,7 +200,7 @@ export default function MainLayout(props) {
                           justifyContent: 'center',
                         }}
                       >
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                        {item.logo}
                       </ListItemIcon>
                       <Fade in={barState}>
                         <ListItemText primary={item.label} />
@@ -211,6 +219,7 @@ export default function MainLayout(props) {
         <Stack direction={"column"} spacing={"30px"} sx={{width: "100%"}}>
           <Outlet/>
         </Stack>
+        <Footer/>
       </Box>
     </Box>
   );

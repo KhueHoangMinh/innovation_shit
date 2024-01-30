@@ -15,6 +15,10 @@ function TransitionProvider(props) {
         // setBrightness(0)
         wrapperRef.current.style.filter = "brightness(0)"
         setTimeout(async ()=>{
+            if(props.scrollWrapper) {
+                props.scrollWrapper.scrollTo(0,0)
+            }
+            window.scrollTo(0,0)
             await callback()
             wrapperRef.current.style.filter = "brightness(1)"
         },props.duration)

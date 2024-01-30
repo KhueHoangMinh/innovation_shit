@@ -213,7 +213,7 @@ function Card(props) {
   }
 
   return (
-    <Card onClick={()=>{handleItemClick("/0/gallery/0")}}>
+    <Card onClick={()=>{handleItemClick("/0/gallery/" + Math.random())}}>
       <div>
         <Box>
           <img src={imgAPI}/>

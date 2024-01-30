@@ -1,5 +1,6 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useRef, useState } from 'react'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import { useLocation } from 'react-router-dom';
 
 const ScrollContext = createContext({
     scrollY: 0
@@ -7,15 +8,28 @@ const ScrollContext = createContext({
 
 function ScrollWrapper(props) {
     const [scrollY, setScrollY] = useState(0)
+    const scrollRef = useRef(null)
+    const location = useLocation()
 
+    const scrollTo = (x, y) => {
+      if(scrollRef.current.osInstance()) {
+        scrollRef.current.osInstance().elements().scrollOffsetElement.scrollTop = x
+        scrollRef.current.osInstance().elements().scrollOffsetElement.scrollLeft = y
+      }
+    }
   
     const onScroll = (e) => {
-      const inspecting = e
-      .elements().scrollOffsetElement.scrollTop
+      const inspecting = e.elements().scrollOffsetElement.scrollTop
       setScrollY(inspecting)
     }
+
+    useEffect(()=>{
+      scrollTo(0,0)
+    },[location])
   return (
-    <OverlayScrollbarsComponent defer options={{
+    <OverlayScrollbarsComponent defer
+      ref={scrollRef}
+      options={{
       overflow: {
         x: 'hidden',
         y: 'scroll',

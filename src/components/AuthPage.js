@@ -12,7 +12,7 @@ import Login from './authPage/Login'
 import Register from './authPage/Register'
 import * as SpaceWar from '../assets/animations/spacewar.json'
 import Lottie from 'react-lottie'
-import { CarouselCard } from './common/Card';
+import { CarouselCard, CarouselLanding } from './common/Card';
 
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -24,16 +24,13 @@ import 'swiper/css/pagination';
 import { Autoplay, EffectCoverflow} from 'swiper/modules';
 
 
-const GradientBg = styled.div`
+const Bg = styled.div`
 
   width: 100%;
-  height: 100%;
+  height: fit-content;
   position: absolute;
-
-  background: radial-gradient(ellipse at top, #366fa4, transparent),
-                radial-gradient(ellipse at bottom, #37a76f, transparent),
-                radial-gradient(ellipse at left, #464fa5, transparent),
-                radial-gradient(ellipse at right, #964392, transparent);
+  transform-origin: middle middle;
+  transform: rotate(-45deg) scale(1.4);
 `
 
 
@@ -101,8 +98,92 @@ export default function AuthPage(props) {
 
   return (
       <React.Fragment>
-        <GradientBg>
-        </GradientBg>
+        <Box sx={{position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%", overflow: "hidden", objectFit: "cover"}}>
+          <Bg>
+            <Box sx={{height: "fit-content", width: "100%"}}>
+              <Swiper
+                loop={true}
+                lazy={true}
+                lazyPreloadPrevNext={4}
+                autoplay={{
+                  delay: 6000,
+                  disableOnInteraction: true
+                }}
+                slidesPerView={5}
+                modules={[Autoplay]}
+                className="mySwiper"
+              >
+                {[...Array(10)].map(()=>(
+                  <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", position: "relative", overflow: "hidden"}}>
+                    <CarouselLanding/>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
+            <Box sx={{height: "fit-content", width: "100%"}}>
+              <Swiper
+                loop={true}
+                lazy={true}
+                lazyPreloadPrevNext={4}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: true,
+                  reverseDirection: true
+                }}
+                slidesPerView={5}
+                modules={[Autoplay]}
+                className="mySwiper"
+              >
+                {[...Array(10)].map(()=>(
+                  <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", position: "relative", overflow: "hidden"}}>
+                  <CarouselLanding/>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
+            <Box sx={{height: "fit-content", width: "100%"}}>
+              <Swiper
+                loop={true}
+                lazy={true}
+                lazyPreloadPrevNext={4}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: true
+                }}
+                slidesPerView={5}
+                modules={[Autoplay]}
+                className="mySwiper"
+              >
+                {[...Array(10)].map(()=>(
+                  <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", position: "relative", overflow: "hidden"}}>
+                  <CarouselLanding/>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
+            <Box sx={{height: "fit-content", width: "100%"}}>
+              <Swiper
+                loop={true}
+                lazy={true}
+                lazyPreloadPrevNext={4}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: true,
+                  reverseDirection: true
+                }}
+                slidesPerView={5}
+                modules={[Autoplay]}
+                className="mySwiper"
+              >
+                {[...Array(10)].map(()=>(
+                  <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", position: "relative", overflow: "hidden"}}>
+                  <CarouselLanding/>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
+          </Bg>
+        </Box>
         <Grid container spacing={0} sx={{ 
             m: 0,
             p: 0,
@@ -115,54 +196,8 @@ export default function AuthPage(props) {
                 flexDirection: "column"
 
             }}>
-                <Typography sx={{color: "primary.light", textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
-                <Box sx={{
-                  width: "50%" ,zIndex: 2, position: "relative", overflowX: "visible", 
-                  "&::after" : {
-                    content: '""',
-                    pt: "100%",
-                    display: "block"
-                  },
-                  // "& .swiper-slide": {
-                  //   transition: "0.5s",
-                  //   opacity: 0.3
-                  // },
-                  // "& .swiper-slide-active": {
-                  //   opacity: 1
-                  // }
-                }}>
-                  <Swiper
-                    style={{height: "100%", width: "calc(100% - 40px + 200vw)", padding: "20px 100vw", marginLeft: "-100vw", position: "absolute"}}
-                    effect={'coverflow'}
-                    centeredSlides={true}
-                    loop={true}
-                    lazy={true}
-                    lazyPreloadPrevNext={4}
-                    autoplay={{
-                      delay: 5000,
-                      disableOnInteraction: true
-                    }}
-                    slidesPerView={1}
-                    spaceBetween={"-40%"}
-                    coverflowEffect={{
-                      rotate: 70,
-                      stretch: 0,
-                      depth: 100,
-                      modifier: 0.6,
-                      slideShadows: true,
-                      scale: 0.5,
-                    }}
-                    modules={[EffectCoverflow, Autoplay]}
-                    className="mySwiper"
-                  >
-                    {[...Array(10)].map(()=>(
-                      <SwiperSlide style={{backgroundColor: "#121212", width: "100%", height: "100%", borderRadius: "20px", position: "relative", overflow: "hidden", boxShadow: "3px 3px 15px 5px rgba(0,0,0,0.6)"}}>
-                        <CarouselCard/>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </Box>
-                <Typography sx={{color: "primary.light",textAlign: "center"}} variant='h4'>Exclusiveness is what you deserve!</Typography>
+                {/* <Typography sx={{color: "primary.light", textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
+                <Typography sx={{color: "primary.light",textAlign: "center"}} variant='h4'>Exclusiveness is what you deserve!</Typography> */}
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <Box sx={{

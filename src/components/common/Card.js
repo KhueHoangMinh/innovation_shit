@@ -30,7 +30,6 @@ async function getImage() {
   return img;
 }
 
-
 function CarouselCard(props) {
 
   const [imgAPI,setImgAPI] = useState(null)
@@ -102,7 +101,6 @@ function CarouselLanding(props) {
     const CardContainer = styled.div`
       position: relative;
       width: 100%;
-      border-radius: 12px;
       overflow: hidden;
   
       &::after {
@@ -126,10 +124,8 @@ function CarouselLanding(props) {
           position: absolute;
           transition: 0.2s ease-in-out;
           transform-origin: middle middle;
-          height: 100%;
-          width: 100%;
-          top: 0;
-          left: 0;
+          height: 105%;
+          width: 105%;
         }
       }
   
@@ -144,10 +140,6 @@ function CarouselLanding(props) {
     <CardContainer>
       <div>
         <img src={imgAPI}/>
-        <Box sx={{position: "absolute", height: "fit-content", width: "60%" }}>
-          <Typography variant='h6' noWrap={false} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>Product 1 aaaaaaaaaaaaa sdsd sd s ds d sd sd </Typography>
-          <Typography variant='body1' sx={{color: "#bbbbbb", fontWeight: "600"}}>Abcd</Typography>
-        </Box>
       </div>
     </CardContainer>
   )
@@ -222,12 +214,12 @@ function Card(props) {
           <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>Product 1</Typography>
           <Grid container sx={{width: "100%", height: "fit-content"}}>
             <Grid item xs={6}>
-              <Typography variant='body2' sx={{color: "#bbbbbb"}}>stat 1</Typography>
-              <Typography variant='h6' sx={{fontWeight: "700"}}>abcd</Typography>
+              <Typography variant='body2' sx={{color: "secondary.dark"}}>Floor</Typography>
+              <Typography variant='h6' sx={{fontWeight: "700"}}>10 LUX</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant='body2' sx={{color: "#bbbbbb"}}>stat 2</Typography>
-              <Typography variant='h6' sx={{fontWeight: "700"}}>efgh</Typography>
+              <Typography variant='body2' sx={{color: "secondary.dark"}}>Total Volume</Typography>
+              <Typography variant='h6' sx={{fontWeight: "700"}}>500 LUX</Typography>
             </Grid>
           </Grid>
         </Box>

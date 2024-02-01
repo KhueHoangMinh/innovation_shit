@@ -54,7 +54,7 @@ function Header() {
         </Stack>
         <Toolbar>
           
-          <Autocomplete
+          {/* <Autocomplete
             disablePortal
             id="nav-search"
             options={[
@@ -68,10 +68,10 @@ function Header() {
             ]}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField sx={{height: "36.5px", "& .MuiInputBase-root": {height: "100%", "& #nav-search": {padding: 0, height: "100%"}}}} {...params} placeholder="Search" />}
-          />
+          /> */}
         </Toolbar>
         <Toolbar>
-            <Button onClick={()=>{Transition(()=>navigate("/"))}}>
+            <Button color='secondary' onClick={()=>{Transition(()=>navigate("/"))}}>
               Login
             </Button>
         </Toolbar>

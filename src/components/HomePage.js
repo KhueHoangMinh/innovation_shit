@@ -27,7 +27,8 @@ function HomePage(props) {
       <Stack direction={"row"} sx={{}}>
         {chips.map((chip)=>(
           <>
-            <Chip label={chip} color={"primary"} variant="outlined" onClick={()=>{console.log("click chip")}} sx={{marginRight: "10px", fontWeight: "600px"}}/>
+            <Chip label={chip} color={"secondary"} variant="text" onClick={()=>{console.log("click chip")}} 
+            sx={{marginRight: "10px", fontWeight: "600px", backgroundColor: "secondary.main", fontWeight: "600"}}/>
           </>
         ))}
       </Stack>

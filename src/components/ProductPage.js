@@ -1,6 +1,6 @@
 import { botttsNeutral } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, Modal, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { List } from './common/List';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -53,6 +53,7 @@ function makeid(length) {
   }
   
   const [imgAPI,setImgAPI] = useState(null)
+  const [confirming, setConfirming] = useState(false)
 
     useEffect(()=>{
       getImage().then((api)=>setImgAPI(api))
@@ -80,7 +81,35 @@ function makeid(length) {
 
             <Paper sx={{display: "flex", justifyContent: "space-between", alignItems: "center", p: "20px",borderRadius: "20px"}}>
               <Typography variant='h4'>1000 LUX</Typography>
-              <Button variant='contained'>Make offer</Button>
+              <Button variant='contained' onClick={()=>{setConfirming(true)}}>Buy</Button>
+              
+              <Modal
+                open={confirming}
+                onClose={()=>{
+                  setConfirming(false)
+                }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 400,
+                  bgcolor: 'background.paper',
+                  borderRadius: "20px",
+                  boxShadow: 24,
+                  p: 4,
+                }}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Text in a modal
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                  </Typography>
+                </Box>
+              </Modal>
             </Paper>
 
             <Box sx={{borderRadius: "20px", overflow: "hidden"}}>
@@ -108,6 +137,28 @@ function makeid(length) {
                   Accordion 2
                 </AccordionSummary>
                 <AccordionDetails>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  Accordion 3
+                </AccordionSummary>
+                <AccordionDetails>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
                   malesuada lacus ex, sit amet blandit leo lobortis eget.
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse

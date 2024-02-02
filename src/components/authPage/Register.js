@@ -33,27 +33,38 @@ export default function Register(props) {
       cvc: ""
     }
   })
-  const [remember,setRemember] = useState(true)
   const navigate = useNavigate()
   const user = useSelector(state=>state.auth.user)
   // const auth = getAuth(app)
   // const provider = new GoogleAuthProvider()
-  const [errors,setErrors] = useState()
-  const [storedUser, setStoredUser] = useCookies(['user'])
-  const bgRef = useRef(null)
   const steps = ["Basic information", "Credit card", "Confirm"]
   const [activeStep,setActiveStep] = useState(0)
 
   const getStepperContent = (step) => {
     switch(step) {
       case 0: 
-        return <Basic initVal = {info.basic}/>
+        return <Basic initVal = {info.basic} activeStep={activeStep} setActiveStep={setActiveStep} steps={steps}  handleSubmit={values=>{
+          var newInfo = info
+          newInfo.basic = {...newInfo.basic, ...values}
+          setInfo(newInfo)
+          setActiveStep(activeStep + 1)
+        }}/>
       case 1:
-        return <CreditCard initVal = {info.card}/>
+        return <CreditCard initVal = {info.card} activeStep={activeStep} setActiveStep={setActiveStep} steps={steps}  handleSubmit={values=>{
+          var newInfo = info
+          newInfo.card = {...newInfo.card, ...values}
+          setInfo(newInfo)
+          setActiveStep(activeStep + 1)
+        }}/>
       case 2:
-        return <Summary {...{...info.basic, ...info.card}}/>
+        return <Summary {...{...info.basic, ...info.card}} activeStep={activeStep} setActiveStep={setActiveStep} steps={steps} handleRegister={handleRegister}/>
       default:
-        return <Basic initVal = {info.basic}/>
+        return <Basic initVal = {info.basic} activeStep={activeStep} setActiveStep={setActiveStep} steps={steps} handleSubmit={values=>{
+          var newInfo = info
+          newInfo.basic = {...newInfo.basic, ...values}
+          setInfo(newInfo)
+          setActiveStep(activeStep + 1)
+        }}/>
     }
   }
 

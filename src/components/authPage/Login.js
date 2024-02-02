@@ -44,7 +44,10 @@ export default function Login() {
       //         setErrors('no_match')
       //     }
       // })
-      Transition(()=>navigate("/0/"))
+      const userData = {userId: "123", token: "0xffffffffff"}
+      dispatch(authActions.login(userData))
+      setStoredUser('User',userData,{path: '/'})
+      Transition(()=>navigate(`/${userData.userId}/`))
   }
 
 

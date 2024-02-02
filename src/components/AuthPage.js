@@ -77,7 +77,7 @@ export default function AuthPage(props) {
 
     if(storedUser.User && storedUser.User !== 'null') {
       dispatch(authActions.login({user_id: storedUser.User.user_id, type: storedUser.User.type, displayName: storedUser.User.displayName, email: storedUser.User.email, photourl: storedUser.User.photoURL}))
-      window.socket.emit('online')
+      // window.socket.emit('online')
     } else {
       setStoredUser('User',null,{path: '/'})
       dispatch(authActions.logout())
@@ -98,7 +98,11 @@ export default function AuthPage(props) {
 
   return (
       <React.Fragment>
-        <Box sx={{position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%", overflow: "hidden", objectFit: "cover"}}>
+        <Box sx={{position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%", overflow: "hidden", objectFit: "cover", background: `
+              radial-gradient(ellipse at top, #366fa4, transparent),
+              radial-gradient(ellipse at bottom, #37a76f, transparent),
+              radial-gradient(ellipse at left, #464fa5, transparent),
+              radial-gradient(ellipse at right, #964392, transparent);`}}>
           <Bg>
             <Box sx={{height: "fit-content", width: "100%"}}>
               <Swiper
@@ -196,8 +200,6 @@ export default function AuthPage(props) {
                 flexDirection: "column"
 
             }}>
-                {/* <Typography sx={{color: "primary.light", textShadow: "0px 0px 20px #556cd6", textAlign: "center"}} variant='h1'>LUXURY NFT</Typography>
-                <Typography sx={{color: "primary.light",textAlign: "center"}} variant='h4'>Exclusiveness is what you deserve!</Typography> */}
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <Box sx={{

@@ -192,7 +192,7 @@ function Card(props) {
 
     &:hover {
       cursor: pointer;
-      margin-top: -5px;
+      margin-top: ${props.notMove ? "0" : "-5px"};
       box-shadow: 0px 0px 15px rgba(0,0,0,0.6);
     }
   `

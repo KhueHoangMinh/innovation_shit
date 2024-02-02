@@ -1,9 +1,11 @@
 import { botttsNeutral } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, Modal, Paper, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Grid, Link, Modal, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { List } from './common/List';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Card } from './common/Card';
+import Chart from "react-apexcharts";
 
 function ProductInfo(props) {
   return (
@@ -54,6 +56,23 @@ function makeid(length) {
   
   const [imgAPI,setImgAPI] = useState(null)
   const [confirming, setConfirming] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
+  const [chartData, setChartData] = useState({
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: [,"27/1","28/1","29/1","30/1","31/1","1/2","2/2","3/2"]
+      }
+    },
+    series: [
+      {
+        name: "series-1",
+        data: [300, 400, 450, 500, 490, 600, 700, 1000]
+      }
+    ]
+  })
 
     useEffect(()=>{
       getImage().then((api)=>setImgAPI(api))
@@ -61,10 +80,10 @@ function makeid(length) {
 
   return (
     <>
-      <Grid container spacing={"20px"} sx={{width: "100%"}}>
+      <Grid container sx={{width: "100%"}}>
 
         <Grid item xs={12} sm={6} md={5}>
-          <Stack direction={"column"} spacing={"20px"}>
+          <Stack direction={"column"} spacing={"20px"} sx={{mr: {xs: "0", sm: "20px"}}}>
             <Box sx={{width: "100%"}}>
               <img src={imgAPI} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
             </Box>
@@ -79,9 +98,13 @@ function makeid(length) {
           <Stack direction={"column"} sx={{width: "100%"}} spacing={"20px"}>
             <Typography variant='h3'>Product Name</Typography>
 
-            <Paper sx={{display: "flex", justifyContent: "space-between", alignItems: "center", p: "20px",borderRadius: "20px"}}>
-              <Typography variant='h4'>1000 LUX</Typography>
-              <Button variant='contained' onClick={()=>{setConfirming(true)}}>Buy</Button>
+            <Paper sx={{p: "20px",borderRadius: "20px"}}>
+              <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>current price</Typography>
+              <Stack direction={"row"} spacing={"10px"} sx={{mb: "20px"}}>
+                <Typography variant='h4' sx={{fontWeight: "700"}}>1000 LUX</Typography>
+                <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>$300.00</Typography>
+              </Stack>
+              <Button variant='contained' sx={{width: "100%"}} onClick={()=>{setConfirming(true)}}>Buy</Button>
               
               <Modal
                 open={confirming}
@@ -91,39 +114,70 @@ function makeid(length) {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <Box sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 400,
-                  bgcolor: 'background.paper',
-                  borderRadius: "20px",
-                  boxShadow: 24,
-                  p: 4,
-                }}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
-                  </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                  </Typography>
-                </Box>
+                    <Stack direction={"column"} spacing={"20px"} sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: 400,
+                      bgcolor: 'background.paper',
+                      borderRadius: "20px",
+                      boxShadow: 24,
+                      p: 4,
+                    }}>
+                      <Card notMove={true}/>
+                      <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
+                        <Typography variant="h6">
+                          Total: 
+                        </Typography>
+                        <Typography variant="h6">
+                          1000 LUX
+                        </Typography>
+                      </Stack>
+                      <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
+                        <Typography variant="h6">
+                          Payment: 
+                        </Typography>
+                        <Typography variant="h6">
+                          1000 LUX
+                        </Typography>
+                      </Stack>
+                      <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
+                        <Typography variant="body1">
+                          Total After Payment: 
+                        </Typography>
+                        <Typography variant="body1">
+                          0 LUX
+                        </Typography>
+                      </Stack>
+                      <Stack direction={"row"} spacing={"10px"} sx={{alignItems: "center"}}>
+                        <Checkbox checked={confirmed} onChange={e=>{setConfirmed(e.target.checked)}} sx={{padding: "0"}}/>
+                        <Typography variant='body2'>I agreed with Lux's <Link sx={{cursor: "pointer"}}>Terms & Policy</Link></Typography>
+                      </Stack>
+                      <Button disabled={!confirmed} variant='contained' onClick={()=>{
+                        setConfirming(false)
+                      }}>Confirm</Button>
+                    </Stack>
               </Modal>
             </Paper>
 
             <Box sx={{borderRadius: "20px", overflow: "hidden"}}>
-              <Accordion>
+              <Accordion defaultExpanded>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  Accordion 1
+                  Price history
                 </AccordionSummary>
                 <AccordionDetails>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  <Chart
+                    options={chartData.options}
+                    series={chartData.series}
+                    type="line"
+                    height={300}
+                    style={{width: "100%"}}
+                  />
                 </AccordionDetails>
               </Accordion>
 

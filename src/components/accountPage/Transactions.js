@@ -1,0 +1,189 @@
+import styled from '@emotion/styled';
+import { Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, tableCellClasses } from '@mui/material';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import React from 'react'
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import CallReceivedIcon from '@mui/icons-material/CallReceived';
+import { red } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
+
+
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
+
+function Transactions() {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(+event.target.value);
+      setPage(0);
+    };
+  
+    
+  const columns = [
+    { id: 'token_id', label: 'Token ID', minWidth: 170 },
+    { id: 'token_name', label: 'Token Name', minWidth: 100 },
+    {
+      id: 'sender',
+      label: 'Sender',
+      minWidth: 170,
+      format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+      id: 'receiver',
+      label: 'Receiver',
+      minWidth: 170,
+      format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+      id: 'hash',
+      label: 'Hash',
+      minWidth: 170,
+      format: (value) => value.toFixed(2),
+    },
+    {
+      id: 'timestamp',
+      label: 'Time',
+      minWidth: 170,
+      format: (value) => value.toFixed(2),
+    },
+    {
+      id: 'fee',
+      label: 'Fee',
+      minWidth: 170,
+      format: (value) => value.toFixed(2),
+    },
+    {
+      id: 'signature',
+      label: 'Signature',
+      minWidth: 170,
+      format: (value) => value.toFixed(2),
+    },
+  ];
+  
+  function createData(name, code, population, size) {
+    const density = population / size;
+    return { name, code, population, size, density };
+  }
+  
+  const rows = Array(100).fill(
+    {
+      "token_id": "0x" + makeid(15),
+      "token_name": "LUX",
+      "sender": "0x" + makeid(15),
+      "receiver": "0x" + makeid(15),
+      "hash": "0x" + makeid(15),
+      "timestamp": "2024-01-30T12:34:56Z",
+      "fee": `${Math.random()} ETH`,
+      "signature": "0x" + makeid(15)
+    });
+  
+  
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  
+    return (
+      <>
+        <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: "20px" }}>
+          <OverlayScrollbarsComponent defer
+            options={{
+            overflow: {
+              x: 'scroll',
+              y: 'scroll',
+            },
+            scrollbars: {
+              theme: 'os-theme-light',
+              visibility: 'auto',
+              autoHide: 'never',
+              autoHideDelay: 1300,
+              autoHideSuspend: false,
+              dragScroll: true,
+              clickScroll: false,
+              pointers: ['mouse', 'touch', 'pen'],
+            },
+          }} style={{maxWidth: "100%"}}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                      sx={{fontWeight: "600", backgroundColor: "black"}}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <StyledTableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                                {column.id === "fee" ? <>{Math.random() < 0.5 ? <ArrowOutwardIcon sx={{color: red[500]}}/> : <CallReceivedIcon sx={{color: green[500]}}/>}</>:<></>}
+                            </StyledTableCell>
+                          );
+                        })}
+                      </StyledTableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+          </OverlayScrollbarsComponent>
+          
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </>
+    )
+  }
+
+export default Transactions

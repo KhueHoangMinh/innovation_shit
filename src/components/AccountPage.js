@@ -6,37 +6,26 @@ import Archive from './accountPage/Archive';
 import Information from './accountPage/Information';
 import Balance from './accountPage/Balance';
 import Transactions from './accountPage/Transactions';
+import { useSelector } from 'react-redux';
 
-function makeid(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-  }
-  
-  async function getImage() {
-    const img = await createAvatar(botttsNeutral, {
-      seed: makeid(5),
-      size: 128,
-      // backgroundtype: "gradientLinear"
-      // ... other options
-    }).toDataUri()
-  
-    return img;
-  }
+async function getImage(id) {
+  const img = await createAvatar(botttsNeutral, {
+    seed: id,
+    size: 128,
+    // backgroundtype: "gradientLinear"
+    // ... other options
+  }).toDataUri()
 
-
-
+  return img;
+}
 
 function Head() {
     const [imgAPI,setImgAPI] = useState(null)
+    const authState = useSelector(state => state.auth.user)
+
     useEffect(()=>{
-      getImage().then((api)=>setImgAPI(api))
+      if(authState && authState.userId) getImage(authState.userId).then((api)=>setImgAPI(api))
+
     },[])
     return (
       <Stack direction={{xs: "column", md: "row"}} sx={{height: {xs: "fit-content", md: "300px"}}} spacing={"20px"}>
@@ -51,6 +40,7 @@ function Head() {
             </Box>
             <Stack direction={"column"} spacing={"5px"}>
                 <Typography variant='h4' sx={{color: "secondary.main", fontWeight: "600"}}>User Name </Typography>
+                <Typography variant='body1' sx={{color: "secondary.dark"}}>0xHF89DF97F0DW78KJ</Typography>
                 <Typography variant='body1' sx={{color: "secondary.dark"}}>exampleuseremail@test.com</Typography>
             </Stack>
       </Stack>

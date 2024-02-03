@@ -164,13 +164,13 @@ const CreditCard = (props) => {
                 <Stack direction={"row"} sx={{mt: "10px", alignItems: "center", justifyContent: "space-between"}}>
                   <Box sx={{display: "flex", width: "100%", justifyContent: "end"}}>
 
-                    {props.activeStep !== 0 && (
+                    {props.activeStep && props.activeStep !== 0 && (
                       <Button variant='outlined' onClick={()=>props.setActiveStep(props.activeStep-1)}>
                         Back
                       </Button>
                     )}
                     
-                    {props.activeStep < props.steps.length - 1? (
+                    {props.activeStep && props.activeStep < props.steps.length - 1? (
                       <>
                         <Button  variant='outlined' sx={{ml: "10px"}}  onClick={()=>{props.setActiveStep(props.activeStep + 1)}}>
                           Skip
@@ -180,9 +180,11 @@ const CreditCard = (props) => {
                         </Button>
                       </>
                     ):(
-                      <Button variant='contained' sx={{ml: "10px"}}>
-                        Register
-                      </Button>
+                      <>
+                        <Button type={"submit"} variant='contained' sx={{ml: "10px"}}>
+                          {props.submitText || "Register"}
+                        </Button>
+                      </>
                     )}
                   </Box>
                 </Stack>

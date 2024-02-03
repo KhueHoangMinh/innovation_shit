@@ -10,6 +10,9 @@ import { TransitionContext } from './TransitionProvider';
 import { ScrollContext } from './common/ScrollWrapper';
 import { createAvatar } from '@dicebear/core';
 import { botttsNeutral } from '@dicebear/collection';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { red } from '@mui/material/colors';
 
 
 async function getImage(id) {
@@ -23,6 +26,23 @@ async function getImage(id) {
   return img;
 }
 
+const matchPath = (path) => {
+  switch(path) {
+    case path.match(/^\/$/):
+      return 0;
+    case path.match(/^\/[a-zA-Z0-9]+\/$/):
+      return 1;
+    case path.match(/^\/[a-zA-Z0-9]+\/gallery\/$/):
+      return 2;
+    case path.match(/^\/[a-zA-Z0-9]+\/gallery\/[a-zA-Z0-9]+\/$/):
+      return 3;
+    case path.match(/^\/[a-zA-Z0-9]+\/account\/$/):
+      return 4;
+    default:
+      return -1;
+  }
+}
+
 function Header() {
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
@@ -34,8 +54,6 @@ function Header() {
   const [scrollY,setSrollY] = useState(scrollDimension.scrollY*1.0/20)
   const [imgAPI,setImgAPI] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null);
-  const location = useLocation();
-  console.log(location.pathname);
 
   useEffect(()=>{
     setSrollY(scrollDimension.scrollY*1.0/150)
@@ -119,8 +137,11 @@ function Header() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
+                <MenuItem onClick={()=>{Transition(()=>navigate(`/${authState.userId}/account`))}}>
+                  <AccountCircleIcon sx={{mr: "10px"}}/>Account
+                </MenuItem>
                 <MenuItem onClick={()=>{Transition(()=>navigate("/"))}}>
-                    Log out
+                  <LogoutIcon sx={{color: red[500], mr: "10px"}}/>Log out
                 </MenuItem>
               </Menu>
             </> :

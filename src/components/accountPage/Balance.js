@@ -1,6 +1,8 @@
-import { Button, Divider, Grid, Stack, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button, Divider, Grid, IconButton, Modal, Stack, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
+import Close from '@mui/icons-material/Close';
+import CreditCard from '../authPage/register/CreditCard';
 
 
 function CardInfo(props) {
@@ -22,6 +24,14 @@ function CardInfo(props) {
 }
 
 function Balance() {
+    const [addingCard, setAddingCard] = useState(false)
+    const [card, setCard] = useState({
+      nameOnCard: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvc: ""
+    })
+
     return (
       <>
         <Stack direction={"row"} spacing={"20px"} sx={{ alignItems: "center"}}>
@@ -31,7 +41,43 @@ function Balance() {
         <Divider sx={{margin: "20px 0"}}/>
         <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center", mb: "20px"}}>
           <Typography variant='h5'>Your cards</Typography>
-          <Button variant='text'><AddIcon/>Add Card</Button>
+          <Button onClick={()=>{setAddingCard(true)}} variant='text'><AddIcon/>Add Card</Button>
+          <Modal
+            open={addingCard}
+            onClose={()=>{
+              setAddingCard(false)
+            }}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Stack direction={"column"} sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              borderRadius: "20px",
+              boxShadow: 24,
+            }}>
+              <Stack direction={"row"} sx={{padding: "10px 20px", justifyContent: "space-between", alignItems: "center"}}>
+                <Typography variant='h5'>Add new Card</Typography>
+                <IconButton onClick={()=>{setAddingCard(false)}}>
+                  <Close/>
+                </IconButton>
+              </Stack>
+              <Divider/>
+              <Box sx={{p: 4}}>
+                <CreditCard initVal = {card} submitText={"Add"} handleSubmit={values=>{
+                  var newInfo = card
+                  newInfo.card = {...newInfo.card, ...values}
+                  setCard(newInfo)
+                  console.log(values)
+                  setAddingCard(false)
+                }}/>
+              </Box>
+            </Stack>
+          </Modal>
         </Stack>
         <Grid container spacing={"10px"} sx={{width: "100%"}}>
           <Grid item xs={12} sm={6}>

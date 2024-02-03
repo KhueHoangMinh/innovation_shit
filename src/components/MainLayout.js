@@ -8,9 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 import Header from './Header'
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,6 +64,9 @@ const CustomDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'ope
           width: `calc(${theme.spacing(8)} + 1px)`,
         },
     }),
+    '& .css-15b8vjn-MuiPaper-root-MuiDrawer-paper': {
+      backgroundColor: "black",
+    },
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
@@ -111,6 +112,8 @@ export default function MainLayout(props) {
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
 
+  const location = useLocation();
+
   const handleItemClick = (link) => {
     Transition(()=>{navigate(link)})
   }
@@ -119,16 +122,19 @@ export default function MainLayout(props) {
     {
       label: "Home",
       link: "/0",
+      pathRegex: /^\/[\w.]*\/?$/,
       logo: <HomeIcon/>
     },
     {
       label: "Gallery",
       link: "/0/gallery",
+      pathRegex: /^\/[\w.]*\/gallery\/?$/,
       logo: <AppsIcon/>
     },
     {
       label: "Search",
       link: "/0/search",
+      pathRegex: /^\/[\w.]*\/search\/?$/,
       logo: <SearchIcon/>
     },
     {
@@ -137,6 +143,7 @@ export default function MainLayout(props) {
     {
       label: "Account",
       link: "/0/account",
+      pathRegex: /^\/[\w.]*\/account\/?$/,
       logo: <AccountCircleIcon/>
     }
   ])
@@ -185,7 +192,10 @@ export default function MainLayout(props) {
                 item.label === "divider" ? <>
                   <Divider/>
                 </> : <>
-                  <ListItem key={index} onClick={()=>{handleItemClick(item.link)}} disablePadding sx={{ display: 'block' }}>
+                  <ListItem key={index} onClick={()=>{handleItemClick(item.link)}} disablePadding sx={{ 
+                    display: 'block',
+                    backgroundColor: location.pathname.match(item.pathRegex) ? "rgba(255,255,255,0.08)" : "transparent"
+                  }}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,

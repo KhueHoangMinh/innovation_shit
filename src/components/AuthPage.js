@@ -196,7 +196,7 @@ export default function AuthPage(props) {
                     <Divider sx={{width: "80%"}}><span style={{color: "#757575"}}>Or</span></Divider>
 
                     <Box sx={{display: "flex", justifyContent: "center"}}><Link sx={{cursor: "pointer"}} onClick={handleRegister}>{isLogin ? "Register now" : "Login now"}</Link></Box>
-                    <Box sx={{color: "#757575", fontSize: "15px", fontStyle: "italic"}}>© Lux - Hoang Minh Khue 2024</Box>
+                    <Box sx={{color: "#757575", fontSize: "15px", fontStyle: "italic"}}>© Lux - 2024</Box>
                 </Box>
             </Grid>
         </Grid>

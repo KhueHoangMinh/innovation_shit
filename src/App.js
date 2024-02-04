@@ -23,6 +23,8 @@ import ScrollWrapper from './components/common/ScrollWrapper';
 import ProductPage from './components/ProductPage';
 import GalleryPage from './components/GalleryPage';
 import AccountPage from './components/AccountPage';
+import TradePage from './components/TradePage';
+import SearchPage from './components/SearchPage';
 
 const AppWrapper = styled.div`
   width: 100vw;
@@ -47,8 +49,10 @@ function App() {
                       <MainLayout/>
                     </>}>
                       <Route path="/:userId/" element={<HomePage/>}/>
+                      <Route path="/:userId/trade/" element={<TradePage/>}/>
                       <Route path="/:userId/gallery/" element={<GalleryPage/>}/>
                       <Route path="/:userId/gallery/:itemId" element={<ProductPage/>}/>
+                      <Route path="/:userId/search/" element={<SearchPage/>}/>
                       <Route path="/:userId/account/" element={<AccountPage/>}/>
                     </Route>
                   <Route path='*' element={<ErrorPage/>} />

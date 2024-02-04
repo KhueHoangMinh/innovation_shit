@@ -215,11 +215,15 @@ function Card(props) {
           <Grid container sx={{width: "100%", height: "fit-content"}}>
             <Grid item xs={6}>
               <Typography variant='body2' sx={{color: "secondary.dark"}}>Floor</Typography>
-              <Typography variant='h6' sx={{fontWeight: "700"}}>10 LUX</Typography>
+              <Typography variant='body1' sx={{fontWeight: "700"}}>
+                {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(10)}
+              </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant='body2' sx={{color: "secondary.dark"}}>Total Volume</Typography>
-              <Typography variant='h6' sx={{fontWeight: "700"}}>500 LUX</Typography>
+              <Typography variant='body1' sx={{fontWeight: "700"}}>
+                {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(500)}
+              </Typography>
             </Grid>
           </Grid>
         </Box>

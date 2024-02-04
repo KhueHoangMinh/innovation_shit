@@ -131,7 +131,7 @@ function makeid(length) {
                           Total: 
                         </Typography>
                         <Typography variant="h6">
-                          1000 LUX
+                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}
                         </Typography>
                       </Stack>
                       <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
@@ -139,15 +139,15 @@ function makeid(length) {
                           Payment: 
                         </Typography>
                         <Typography variant="h6">
-                          1000 LUX
+                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}
                         </Typography>
                       </Stack>
                       <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
                         <Typography variant="body1">
-                          Total After Payment: 
+                          New balance: 
                         </Typography>
                         <Typography variant="body1">
-                          0 LUX
+                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(0)}
                         </Typography>
                       </Stack>
                       <Stack direction={"row"} spacing={"10px"} sx={{alignItems: "center"}}>

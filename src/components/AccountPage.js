@@ -45,7 +45,7 @@ function Head() {
               <Stack direction={{sx:"column", md: "row"}} spacing={"20px"} sx={{width: "100%", height: "100%", justifyContent: "space-around", alignItems: "center"}}>
                   <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
                     <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Balance</Typography>
-                    <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>1000 LUX</Typography>
+                    <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>{new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}</Typography>
                   </Stack>
                   <Divider orientation='vertical' sx={{height: "60%"}}/>
                   <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>

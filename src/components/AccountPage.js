@@ -1,6 +1,6 @@
 import { botttsNeutral } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { Box, Fade, Stack, Tab, Tabs,Typography} from '@mui/material'
+import { Box, Fade, Stack, Tab, Tabs,Typography, Divider} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Archive from './accountPage/Archive';
 import Information from './accountPage/Information';
@@ -38,10 +38,26 @@ function Head() {
             >
                 <img src={imgAPI} style={{position: "absolute", top: 0, left: 0, height: "100%", width: "100%"}}/>
             </Box>
-            <Stack direction={"column"} spacing={"5px"}>
-                <Typography variant='h4' sx={{color: "secondary.main", fontWeight: "600"}}>User Name </Typography>
-                <Typography variant='body1' sx={{color: "secondary.dark"}}>0xHF89DF97F0DW78KJ</Typography>
-                <Typography variant='body1' sx={{color: "secondary.dark"}}>exampleuseremail@test.com</Typography>
+            <Stack direction={"column"} spacing={"5px"} sx={{flexGrow: 1}}>
+              <Typography variant='h4' sx={{color: "secondary.main", fontWeight: "600"}}>User Name </Typography>
+              <Typography variant='body1' sx={{color: "secondary.dark"}}>0xHF89DF97F0DW78KJ</Typography>
+              <Typography variant='body1' sx={{color: "secondary.dark"}}>exampleuseremail@test.com</Typography>
+              <Stack direction={{sx:"column", md: "row"}} spacing={"20px"} sx={{width: "100%", height: "100%", justifyContent: "space-around", alignItems: "center"}}>
+                  <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
+                    <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Balance</Typography>
+                    <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>1000 LUX</Typography>
+                  </Stack>
+                  <Divider orientation='vertical' sx={{height: "60%"}}/>
+                  <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
+                    <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Transactions</Typography>
+                    <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>999</Typography>
+                  </Stack>
+                  <Divider orientation='vertical' sx={{height: "60%"}}/>
+                  <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
+                    <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Archived</Typography>
+                    <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>10</Typography>
+                  </Stack>
+              </Stack>
             </Stack>
       </Stack>
     )

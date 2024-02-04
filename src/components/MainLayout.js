@@ -18,6 +18,7 @@ import { useContext } from 'react';
 import { TransitionContext } from './TransitionProvider';
 import Footer from './Footer';
 import HomeIcon from '@mui/icons-material/Home';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AppsIcon from '@mui/icons-material/Apps';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -124,6 +125,12 @@ export default function MainLayout(props) {
       link: "/0",
       pathRegex: /^\/[\w.]*\/?$/,
       logo: <HomeIcon/>
+    },
+    {
+      label: "Trade",
+      link: "/0/trade",
+      pathRegex: /^\/[\w.]*\/trade\/?$/,
+      logo: <CurrencyExchangeIcon/>
     },
     {
       label: "Gallery",

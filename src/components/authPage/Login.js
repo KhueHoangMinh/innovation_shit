@@ -15,6 +15,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { TransitionContext } from '../TransitionProvider'
+import { backend } from '../../constants'
 
 
 export default function Login() {
@@ -34,13 +35,12 @@ export default function Login() {
 
   const handleLogin = (e) => {
       e.preventDefault()
-      Axios.post('/api/login', {email: username, password: password})
+      Axios.post(backend + '/api/login', {email: username, password: password})
       .then(res=>{
           if(res) {
-              const userData = {token: res.token, userId: res.user_id, type: res.type, avatar: res.avatar}
+              const userData = {token: res.data.token, userId: res.data.user_id, type: res.data.type, avatar: res.data.avatar}
               dispatch(authActions.login(userData))
               setStoredUser('User',userData,{path: '/'})
-              console.log(userData)
               Transition(()=>navigate(`/${userData.userId}/`))
           } else {
               setErrors('no_match')

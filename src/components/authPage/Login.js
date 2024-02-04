@@ -34,20 +34,18 @@ export default function Login() {
 
   const handleLogin = (e) => {
       e.preventDefault()
-      // Axios.post('api/users/login', {email: username, password: password})
-      // .then(res=>{
-      //     if(res.data.rows.length === 1) {
-      //         const userData = {user_id: res.data.rows[0].user_id, type: res.data.rows[0].type, displayName: res.data.rows[0].name, email: res.data.rows[0].email, photoURL: res.data.rows[0].photourl}
-      //         dispatch(authActions.login(userData))
-      //         setStoredUser('User',userData,{path: '/'})
-      //     } else {
-      //         setErrors('no_match')
-      //     }
-      // })
-      const userData = {userId: "123", token: "0xffffffffff"}
-      dispatch(authActions.login(userData))
-      setStoredUser('User',userData,{path: '/'})
-      Transition(()=>navigate(`/${userData.userId}/`))
+      Axios.post('/api/login', {email: username, password: password})
+      .then(res=>{
+          if(res) {
+              const userData = {token: res.token, userId: res.user_id, type: res.type, avatar: res.avatar}
+              dispatch(authActions.login(userData))
+              setStoredUser('User',userData,{path: '/'})
+              console.log(userData)
+              Transition(()=>navigate(`/${userData.userId}/`))
+          } else {
+              setErrors('no_match')
+          }
+      })
   }
 
 

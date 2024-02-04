@@ -1,6 +1,7 @@
 {
   "name": "innovation-shit-main",
   "version": "0.1.0",
+  "proxy": "http://localhost:3001/",
   "private": true,
   "dependencies": {
     "@dicebear/collection": "^7.0.4",

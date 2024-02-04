@@ -1,12 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Carousel from 'react-material-ui-carousel';
-import { Paper, Button, Stack, Chip, Grid, Link } from '@mui/material'
-import styled from '@emotion/styled';
-import { Card, CarouselCard } from './common/Card';
+import { Stack, Chip } from '@mui/material'
 import { List } from './common/List';
 import Slider from './common/Slider';
 

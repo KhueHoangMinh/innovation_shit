@@ -7,11 +7,8 @@ import { authActions } from '../store/auth-slice'
 import {useCookies} from 'react-cookie'
 import { Typography, CssBaseline, Grid, Box, Link, Divider, Fade, Grow } from '@mui/material'
 import logo from '../assets/images/logo.png'
-import NET from 'vanta/dist/vanta.net.min'
 import Login from './authPage/Login'
 import Register from './authPage/Register'
-import * as SpaceWar from '../assets/animations/spacewar.json'
-import Lottie from 'react-lottie'
 import { CarouselCard, CarouselLanding } from './common/Card';
 
 
@@ -49,31 +46,7 @@ export default function AuthPage(props) {
     setIsLogin(!isLogin)
   }
 
-  const loadBg = () => {
-    if(!canvasLoaded) {
-      NET({
-        el: bgRef.current,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x37a9ff,
-        backgroundColor: 0x0,
-        points: 10.00,
-        maxDistance: 25.00,
-        spacing: 20.00,
-        showDots: false
-      })
-      canvasLoaded = true
-    }
-  }
-
   useEffect(()=>{
-
-    // loadBg()
 
     if(storedUser.User && storedUser.User !== 'null') {
       dispatch(authActions.login({user_id: storedUser.User.user_id, type: storedUser.User.type, displayName: storedUser.User.displayName, email: storedUser.User.email, photourl: storedUser.User.photoURL}))

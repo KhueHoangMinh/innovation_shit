@@ -11,18 +11,23 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 function SearchPage(props) {
+
+    // store the values from server
     const [mostSearched, setMostSearched] = useState([])
     const [trending, setTrending] = useState([])
     const [itemNum, setItemNum] = useState(12)
     const [page,setPage] = useState(1)
-  
+
     useEffect(()=>{
-      Axios.get(backend+'/api/trending').then(res=>{
+        // get categories mock data from server
+        Axios.get(backend+'/api/trending').then(res=>{
         setTrending(res.data)
-      })
-      Axios.get(backend+'/api/search').then(res=>{
+        })
+
+        // get search result mpck data from server
+        Axios.get(backend+'/api/search').then(res=>{
         setMostSearched(res.data)
-      })
+        })
     },[])
 
   return (

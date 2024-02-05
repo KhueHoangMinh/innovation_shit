@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+// redux slice to store displaying items, not implemented
 const displayItemsSlice = createSlice({
     name: 'displayItems',
     initialState: {

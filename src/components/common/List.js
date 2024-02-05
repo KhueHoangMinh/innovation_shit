@@ -4,9 +4,11 @@ import { Card } from './Card'
 import { useNavigate } from 'react-router-dom'
 import { TransitionContext } from '../TransitionProvider'
 
+// list to display a group of product cards
 function List(props) {
-  const navigate = useNavigate()
 
+  // transition to product page on click
+  const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
 
   return (

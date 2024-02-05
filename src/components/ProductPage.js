@@ -30,24 +30,35 @@ function RelatedProducts(props) {
 
 function ProductPage() {
 
+  // store values from server
   const [related, setRelated] = useState([])
   const [product, setProduct] = useState({})
   const [rate, setRate] = useState(null)
 
   useEffect(()=>{
+    // get product list mock data from server
     Axios.get(backend+'/api/product_list').then(res=>{
       setRelated(res.data)
     })
+    
+    // get product mock data from server
     Axios.get(backend+'/api/product').then(res=>{
       setProduct(res.data)
     })
+    
+    // get market rate mock data from server
     Axios.get(backend+'/api/market_rate').then(res=>{
       setRate(res.data.rate)
     })
   },[])
   
+  // open/close of confirm buying modal
   const [confirming, setConfirming] = useState(false)
+
+  // state of user agreed to policies
   const [confirmed, setConfirmed] = useState(false)
+
+  // mock data for the chart, implementing
   const [chartData, setChartData] = useState({
     options: {
       chart: {

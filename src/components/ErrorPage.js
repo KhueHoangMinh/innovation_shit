@@ -3,6 +3,7 @@ import React, {useContext} from 'react'
 import { TransitionContext } from './TransitionProvider'
 import { useNavigate } from 'react-router-dom'
 
+// page to display error 404 not found
 function ErrorPage() {
     const navigate = useNavigate()
     const Transition = useContext(TransitionContext)

@@ -5,12 +5,11 @@ import React, { useEffect, useState } from 'react'
 import { backend } from '../constants';
 import Axios from 'axios';
 
+// create user avatar based on user id
 async function getImage(id) {
   const img = await createAvatar(botttsNeutral, {
     seed: id,
     size: 128,
-    // backgroundtype: "gradientLinear"
-    // ... other options
   }).toDataUri()
 
   return img;
@@ -18,11 +17,12 @@ async function getImage(id) {
 
 function BuyingCard(props) {
 
+  // store user avatar
   const [imgAPI,setImgAPI] = useState(null)
 
-    useEffect(()=>{
-      getImage(props.user_id).then((api)=>setImgAPI(api))
-    },[])
+  useEffect(()=>{
+    getImage(props.user_id).then((api)=>setImgAPI(api))
+  },[])
 
   return (
     <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center", width: "100%", height: "180px", padding: "20px", borderRadius: "10px", backgroundColor: "rgba(255,255,255,0.05)"}}>

@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+// redux slice to store user's authentication state
 const authSlice = createSlice({
     name: 'auth',
     initialState: {

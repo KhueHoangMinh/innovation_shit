@@ -1,16 +1,8 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 import AuthPage from './components/AuthPage';
 import HomePage from './components/HomePage';
-// import Header from './components/Header';
-// import About from './components/About';
-// import Market from './components/Market';
-// import UserPage from './components/UserPage';
-// import MarketProduct from './components/market-component/ProductPage';
-// import Register from './components/Register';
-// import Checkout from './components/Checkout';
-// import Receipt from './components/Receipt';
 import {CookiesProvider} from 'react-cookie'
 import theme from './colorTheme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -32,6 +24,7 @@ const AppWrapper = styled.div`
   position: relative;
 `
 
+// this component defines the routes that the app will have
 function App() {
 
   return (

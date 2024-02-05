@@ -20,7 +20,7 @@ import 'swiper/css/pagination';
 
 import { Autoplay, EffectCoverflow} from 'swiper/modules';
 
-
+// style of the background
 const Bg = styled.div`
 
   width: 100%;
@@ -30,17 +30,20 @@ const Bg = styled.div`
   transform: rotate(-45deg) scale(1.4);
 `
 
-
+// the landing and authentication page
 export default function AuthPage(props) {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const user = useSelector(state=>state.auth.user)
-    // const auth = getAuth(app)
-    // const provider = new GoogleAuthProvider()
-    const [storedUser, setStoredUser] = useCookies(['user'])
-    const bgRef = useRef(null)
-    const [isLogin, setIsLogin] = useState(true)
-    var canvasLoaded = false
+
+  // define dispatch function to send actions to redux
+  const dispatch = useDispatch()
+
+  // get current user information to check if user is logged in
+  const user = useSelector(state=>state.auth.user)
+  // const auth = getAuth(app)
+  // const provider = new GoogleAuthProvider()
+  const [storedUser, setStoredUser] = useCookies(['user'])
+  const bgRef = useRef(null)
+  const [isLogin, setIsLogin] = useState(true)
+  var canvasLoaded = false
 
   const handleRegister = ()=> {
     setIsLogin(!isLogin)
@@ -48,6 +51,7 @@ export default function AuthPage(props) {
 
   useEffect(()=>{
 
+    // check the user's login state
     if(storedUser.User && storedUser.User !== 'null') {
       dispatch(authActions.login({user_id: storedUser.User.user_id, type: storedUser.User.type, displayName: storedUser.User.displayName, email: storedUser.User.email, photourl: storedUser.User.photoURL}))
       // window.socket.emit('online')

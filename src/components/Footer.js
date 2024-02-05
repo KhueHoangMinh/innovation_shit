@@ -5,6 +5,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import XIcon from '@mui/icons-material/X';
 
+// footer for every page
 function Footer() {
   return (
     <Box sx={{width: "100%", p: "50px 0", color: "secondary.dark"}}>

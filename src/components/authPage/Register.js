@@ -40,6 +40,7 @@ export default function Register(props) {
   const steps = ["Basic information", "Credit card", "Confirm"]
   const [activeStep,setActiveStep] = useState(0)
 
+  // display steps of the registering process
   const getStepperContent = (step) => {
     switch(step) {
       case 0: 

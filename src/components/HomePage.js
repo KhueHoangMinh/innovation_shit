@@ -9,13 +9,18 @@ import { backend } from '../constants';
 
 
 function HomePage(props) {
+  
+  // store products from server
   const [highlightCategories, setHighlightCategories] = useState([])
   const [trending, setTrending] = useState([])
 
   useEffect(()=>{
+    // get trending categories from server
     Axios.get(backend+'/api/trending').then(res=>{
       setTrending(res.data)
     })
+    
+    // get product lists from server
     Axios.get(backend+'/api/home').then(res=>{
       setHighlightCategories(res.data)
     })

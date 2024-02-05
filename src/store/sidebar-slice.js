@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// redux slice to store the sidebar's open/close state
 const barSlice = createSlice({
     name: "barState",
     initialState: {

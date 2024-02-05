@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { TransitionContext } from '../TransitionProvider';
 
+// randomized an ID for dicebear image generator
 function makeid(length) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -19,21 +20,19 @@ function makeid(length) {
   return result;
 }
 
+// get random image from dicebear library
 async function getImage() {
   const img = await createAvatar(botttsNeutral, {
     seed: makeid(5),
     size: 128,
-    // backgroundtype: "gradientLinear"
-    // ... other options
   }).toDataUri()
 
   return img;
 }
 
 function CarouselCard(props) {
-
-  const [imgAPI,setImgAPI] = useState(null)
   
+  // transition on click
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
 
@@ -41,48 +40,44 @@ function CarouselCard(props) {
     Transition(()=>{navigate(link)})
   }
 
-    useEffect(()=>{
-      getImage().then((api)=>setImgAPI(api))
-    },[])
+  const CardContainer = styled.div`
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
 
-    const CardContainer = styled.div`
-      position: relative;
+    &::after {
+      content: "";
+      display: block;
+      padding-bottom:
+        100%;
+    }
+
+    & > div {
+      position: absolute;
+      height: 100%;
       width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-  
-      &::after {
-        content: "";
-        display: block;
-        padding-bottom:
-         100%;
-      }
-  
-      & > div {
+      top: 0;
+      left: 0;
+
+      img {
         position: absolute;
+        transition: 0.2s ease-in-out;
+        transform-origin: middle middle;
         height: 100%;
         width: 100%;
         top: 0;
         left: 0;
-  
-        img {
-          position: absolute;
-          transition: 0.2s ease-in-out;
-          transform-origin: middle middle;
-          height: 100%;
-          width: 100%;
-          top: 0;
-          left: 0;
-        }
       }
-  
-      &:hover {
-        cursor: pointer;
-        img {
-          transform: scale(1.1);
-        }
+    }
+
+    &:hover {
+      cursor: pointer;
+      img {
+        transform: scale(1.1);
       }
-    `
+    }
+  `
   return(
     <CardContainer onClick={()=>handleItemClick("/0/gallery/" + props.product_id)}>
       <div>
@@ -154,13 +149,6 @@ function CarouselLanding(props) {
 
 function Card(props) {
 
-
-  const [imgAPI,setImgAPI] = useState(null)
-
-    useEffect(()=>{
-      getImage().then((api)=>setImgAPI(api))
-    },[])
-
   const Card = styled.div`
     position: relative;
     width: 100%;
@@ -203,7 +191,7 @@ function Card(props) {
       box-shadow: 0px 0px 15px rgba(0,0,0,0.6);
     }
   `
-  
+  // transition on click
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
 

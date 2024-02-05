@@ -20,36 +20,45 @@ import { backend } from '../../constants'
 
 export default function Login() {
   const dispatch = useDispatch()
+
+  // store user inputs in states
   const [username,setUsername] = useState()
   const [password,setPassword] = useState()
   const [showPass, setShowPass] = useState(false)
   const [remember,setRemember] = useState(true)
+  
+  // transition
   const navigate = useNavigate()
   const user = useSelector(state=>state.auth.user)
+  const Transition = useContext(TransitionContext)
   // const auth = getAuth(app)
   // const provider = new GoogleAuthProvider()
-  const [errors,setErrors] = useState()
+
+  // store user to cookie, not yet implemented
   const [storedUser, setStoredUser] = useCookies(['user'])
-  const bgRef = useRef(null)
-  const Transition = useContext(TransitionContext)
 
   const handleLogin = (e) => {
-      e.preventDefault()
-      Axios.post(backend + '/api/login', {email: username, password: password})
-      .then(res=>{
-          if(res) {
-              const userData = {token: res.data.token, userId: res.data.user_id, type: res.data.type, avatar: res.data.avatar, username: res.data.username, email: res.data.email}
-              dispatch(authActions.login(userData))
-              setStoredUser('User',userData,{path: '/'})
-              Transition(()=>navigate(`/${userData.userId}/`))
-          } else {
-              setErrors('no_match')
-          }
-      })
+    e.preventDefault()
+
+    // get mock login from backend
+    Axios.post(backend + '/api/login', {email: username, password: password})
+    .then(res=>{
+        if(res) {
+
+          // store necessary user information to redux
+          const userData = {token: res.data.token, userId: res.data.user_id, type: res.data.type, avatar: res.data.avatar, username: res.data.username, email: res.data.email}
+          dispatch(authActions.login(userData))
+          setStoredUser('User',userData,{path: '/'})
+
+          // transition to home page
+          Transition(()=>navigate(`/${userData.userId}/`))
+        } else {
+        }
+    })
   }
 
 
-  
+  // function to handle google login, not yet implemented
   const handleGoogleLogin = () => {
     // signInWithPopup(auth,provider).then((result)=>{
     //     Axios.post('api/users/googlelogin', {email: result.user.email})

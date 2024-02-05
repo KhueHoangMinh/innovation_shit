@@ -2,17 +2,19 @@ import styled from '@emotion/styled'
 import { TrainSharp } from '@mui/icons-material'
 import React, {createContext, useEffect, useRef, useState} from 'react'
 
+// create a react context for other component to access easily
 const TransitionContext = createContext(
     async (callback) => {
         await callback()
     }
 )
 
+// provide transition to the entire app
 function TransitionProvider(props) {
     const wrapperRef = useRef(null)
     
+    // call callback function on transition
     const Transition = (callback) => {
-        // setBrightness(0)
         wrapperRef.current.style.filter = "brightness(0)"
         setTimeout(async ()=>{
             if(props.scrollWrapper) {

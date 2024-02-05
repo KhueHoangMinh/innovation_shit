@@ -5,13 +5,16 @@ import { Box, Grid } from '@mui/material';
 import { Card } from '../common/Card';
 
 function Archive() {
+  // Get user's archived products
   const [archived, setArchived] = useState([])
 
   useEffect(()=>{
+    // get mock data from server
     Axios.get(backend+'/api/archived').then(res=>{
       setArchived(res.data)
     })
   },[])
+
     return (
       <>
       <Box>

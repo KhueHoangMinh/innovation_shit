@@ -7,43 +7,48 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { CarouselCard } from './Card';
 
+// the slider at home page
 function Slider(props) {
-    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
-    function getWindowDimensions() {
-        const { innerWidth: width, innerHeight: height } = window;
-        return {
-          width,
-          height
-        };
-      }
-    
-    function handleResize() {
-        setWindowDimensions(getWindowDimensions());
-        }
+  // store current window's dimension
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
-    useEffect(() => {
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const getItemNum = () => {
-        if(windowDimensions.width > 1500) {
-            return 4
-        } else 
-        if(windowDimensions.width > 1200) {
-            return 3
-        } else 
-        if(windowDimensions.width > 800) {
-            return 2
-        } else 
-        if(windowDimensions.width > 600) {
-            return 1
-        } else {
-            return 1
-        }
+  //get the window's dimension
+  function getWindowDimensions() {
+      const { innerWidth: width, innerHeight: height } = window;
+      return {
+        width,
+        height
+      };
     }
+  
+  // resize the slider based on window's width
+  function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+      }
+
+  useEffect(() => {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // define the number of items to display on each window's width range
+  const getItemNum = () => {
+      if(windowDimensions.width > 1500) {
+          return 4
+      } else 
+      if(windowDimensions.width > 1200) {
+          return 3
+      } else 
+      if(windowDimensions.width > 800) {
+          return 2
+      } else 
+      if(windowDimensions.width > 600) {
+          return 1
+      } else {
+          return 1
+      }
+  }
 
   return (
     <Box

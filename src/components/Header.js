@@ -46,34 +46,49 @@ const matchPath = (path) => {
   }
 }
 
+// header for every page
 function Header() {
 
+  //transition to other page
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
   const scrollDimension = useContext(ScrollContext)
+
+  // define dispatch function to send actions to redux
   const dispatch = useDispatch()
+
+  // get the current authentication state
   const authState = useSelector(state => state.auth.user)
+
+  // open/slose state of the sidebar
   const barState = useSelector(state => state.barState.isOpenning)
-  const navItems = ['Home', 'About', 'Contact'];
+
+  // get the scroll height from custom scroll bar
   const [scrollY,setSrollY] = useState(scrollDimension.scrollY*1.0/120)
+
+  // store user avatar
   const [imgAPI,setImgAPI] = useState(null)
+
+  // store anchor element for menu
   const [anchorEl, setAnchorEl] = useState(null);
+
+  // store market rate from server
   const [rate, setRate] = useState(0)
 
   useEffect(()=>{
+    // get market rate from server
     Axios.get(backend+'/api/market_rate').then(res=>{
       setRate(res.data.rate)
     })
   },[])
 
+  //on scroll listener
   useEffect(()=>{
-
-
-
     setSrollY(scrollDimension.scrollY*1.0/120)
     if(authState && authState.userId) getImage(authState.userId).then((api)=>setImgAPI(api))
   },[scrollDimension.scrollY, authState])
 
+  // handle open/close menu
   const handlePopover = (event) => {
     if(anchorEl) {
       setAnchorEl(null);

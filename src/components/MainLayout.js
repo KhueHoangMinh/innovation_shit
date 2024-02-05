@@ -101,24 +101,35 @@ const CustomDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'ope
   })
 );
 
+// the main layout for the app
 export default function MainLayout(props) {
+  // get mui's custom theme
   const theme = useTheme();
+
+  // define dispatch function to send actions to redux
   const dispatch = useDispatch()
+
+  // check if user is browsing on desktop or not to adapt layout
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"))
 
+  // open/close state of sidebar from redux store
   const barState = useSelector(state => state.barState)
 
+  // open/close state of sidebar
   const barOpen = barState.isOpenning ? barState.isOpenning : barState.isOpenningTemp
 
+  // transition to other page
   const navigate = useNavigate()
   const Transition = useContext(TransitionContext)
 
+  // get the current url path
   const location = useLocation();
 
   const handleItemClick = (link) => {
     Transition(()=>{navigate(link)})
   }
 
+  //define the items that will be displayed on sidebar
   const [menuItems, setMenuItems] = React.useState([
     {
       label: "Home",

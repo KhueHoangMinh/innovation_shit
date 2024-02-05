@@ -12,27 +12,33 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 function Transactions() {
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const [transactions, setTransactions] = useState([])
+  // pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // state to store transactions
+  const [transactions, setTransactions] = useState([])
+
+  useEffect(()=>{
+    // get transaction from backend
+    Axios.get(backend+'/api/transactions').then(res=>{
+      setTransactions(res.data)
+    })
+  },[])
+
+  // pagination
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // pagination
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   
-    useEffect(()=>{
-      Axios.get(backend+'/api/transactions').then(res=>{
-        setTransactions(res.data)
-      })
-    },[])
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    };
-  
-    
+  // define table's columns
   const columns = [
     { id: 'token_id', label: 'Token ID', minWidth: 170 },
     { id: 'token_name', label: 'Token Name', minWidth: 100 },

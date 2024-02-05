@@ -33,6 +33,13 @@ async function getImage() {
 function CarouselCard(props) {
 
   const [imgAPI,setImgAPI] = useState(null)
+  
+  const navigate = useNavigate()
+  const Transition = useContext(TransitionContext)
+
+  const handleItemClick = (link) => {
+    Transition(()=>{navigate(link)})
+  }
 
     useEffect(()=>{
       getImage().then((api)=>setImgAPI(api))
@@ -77,12 +84,12 @@ function CarouselCard(props) {
       }
     `
   return(
-    <CardContainer>
+    <CardContainer onClick={()=>handleItemClick("/0/gallery/" + props.product_id)}>
       <div>
-        <img src={imgAPI}/>
+        <img src={props.image_url}/>
         <Box sx={{position: "absolute", height: "fit-content", width: "100%", bottom: 0, p: "10px", pt: "50%", background: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0))"}}>
-          <Typography variant='h6' noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>Product 1 aaaaaaaaaaaaa sdsd sd s ds d sd sd </Typography>
-          <Typography variant='body1' sx={{color: "#bbbbbb", fontWeight: "600"}}>Abcd</Typography>
+          <Typography variant='h6' noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.product_name}</Typography>
+          <Typography variant='body1' noWrap={true} sx={{maxWidth: "calc(100% - 20px)",color: "#bbbbbb", fontWeight: "600"}}>{props.product_description}</Typography>
         </Box>
       </div>
     </CardContainer>
@@ -205,24 +212,24 @@ function Card(props) {
   }
 
   return (
-    <Card onClick={()=>{handleItemClick("/0/gallery/" + Math.random())}}>
+    <Card onClick={()=>{handleItemClick("/0/gallery/" + props.product_id)}}>
       <div>
         <Box>
-          <img src={imgAPI}/>
+          <img src={props.image_url}/>
         </Box>
         <Box sx={{p: "15px",display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#202020", "&:hover": {backgroundColor: "#303030"}}}>
-          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>Product 1</Typography>
+          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.product_name}</Typography>
           <Grid container sx={{width: "100%", height: "fit-content"}}>
             <Grid item xs={6}>
               <Typography variant='body2' sx={{color: "secondary.dark"}}>Floor</Typography>
               <Typography variant='body1' sx={{fontWeight: "700"}}>
-                {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(10)}
+                {props.best_price && props.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: props.price_unit}).format( props.best_price ) : "N/A" }
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant='body2' sx={{color: "secondary.dark"}}>Total Volume</Typography>
               <Typography variant='body1' sx={{fontWeight: "700"}}>
-                {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(500)}
+                {props.volume && props.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: props.price_unit}).format(props.volume) : "N/A"}
               </Typography>
             </Grid>
           </Grid>

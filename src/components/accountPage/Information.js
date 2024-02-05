@@ -1,5 +1,7 @@
 import { FormControl, Grid, Stack, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { backend } from '../../constants';
+import Axios from 'axios';
 
 function EditableInfo(props) {
     const [editting, setEditting] = useState(false)
@@ -46,30 +48,39 @@ function EditableInfo(props) {
     )
   }
 
-function Information() {
+function Information(props) {
+  const [details, setDetails] = useState({})
+
+  useEffect(()=>{
+    Axios.get(backend+'/api/user_details').then(res=>{
+      setDetails(res.data)
+    })
+    console.log(details)
+  },[props.page])
+
     return (
       <>
         <Grid container spacing={"10px"} sx={{width: "100%"}}>
           <Grid item xs={12} sm={6}>
-              <EditableInfo label={"First name: "} value={"User"}/>
+              <EditableInfo label={"First name: "} value={details.first_name ? details.first_name : "N/A"}/>
           </Grid>
           <Grid item xs={12} sm={6}>
-              <EditableInfo label={"Last name: "} value={"Name"}/>
+              <EditableInfo label={"Last name: "} value={details.last_name ? details.last_name : "N/A"}/>
           </Grid>
           <Grid item xs={12} sm={6}>
-              <EditableInfo label={"User name: "} value={"User Name"}/>
+              <EditableInfo label={"User name: "} value={details.username ? details.username : "N/A"}/>
           </Grid>
           <Grid item xs={12} sm={6}>
-              <EditableInfo label={"Birth: "} value={"11/11/1111"}/>
+              <EditableInfo label={"Birth: "} value={details.birth ? details.birth : "N/A"}/>
           </Grid>
           <Grid item xs={12} md={6}>
-              <EditableInfo label={"Email: "} value={"exampleuseremail@test.com"}/>
+              <EditableInfo label={"Email: "} value={details.email ? details.email : "N/A"}/>
           </Grid>
           <Grid item xs={12} md={6}>
-              <EditableInfo label={"Phone: "} value={"0123456789"}/>
+              <EditableInfo label={"Phone: "} value={details.phone ? details.phone : "N/A"}/>
           </Grid>
           <Grid item xs={12} md={12}>
-              <EditableInfo label={"Address: "} value={"Dongda, Hanoi, Vietnam"}/>
+              <EditableInfo label={"Address: "} value={details.address ? details.address : "N/A"}/>
           </Grid>
         </Grid>
       </>

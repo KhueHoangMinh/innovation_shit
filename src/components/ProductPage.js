@@ -1,11 +1,11 @@
-import { botttsNeutral } from '@dicebear/collection';
-import { createAvatar } from '@dicebear/core';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Grid, Link, Modal, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { List } from './common/List';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Card } from './common/Card';
 import Chart from "react-apexcharts";
+import Axios from 'axios';
+import { backend } from '../constants';
 
 function ProductInfo(props) {
   return (
@@ -30,31 +30,22 @@ function RelatedProducts(props) {
 
 function ProductPage() {
 
-  
-function makeid(length) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
+  const [related, setRelated] = useState([])
+  const [product, setProduct] = useState({})
+  const [rate, setRate] = useState(null)
 
-  async function getImage() {
-    const img = await createAvatar(botttsNeutral, {
-      seed: makeid(5),
-      size: 128,
-      // backgroundtype: "gradientLinear"
-      // ... other options
-    }).toDataUri()
+  useEffect(()=>{
+    Axios.get(backend+'/api/product_list').then(res=>{
+      setRelated(res.data)
+    })
+    Axios.get(backend+'/api/product').then(res=>{
+      setProduct(res.data)
+    })
+    Axios.get(backend+'/api/market_rate').then(res=>{
+      setRate(res.data.rate)
+    })
+  },[])
   
-    return img;
-  }
-  
-  const [imgAPI,setImgAPI] = useState(null)
   const [confirming, setConfirming] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
   const [chartData, setChartData] = useState({
@@ -74,10 +65,6 @@ function makeid(length) {
     ]
   })
 
-    useEffect(()=>{
-      getImage().then((api)=>setImgAPI(api))
-    },[])
-
   return (
     <>
       <Grid container sx={{width: "100%"}}>
@@ -85,24 +72,24 @@ function makeid(length) {
         <Grid item xs={12} sm={6} md={5}>
           <Stack direction={"column"} spacing={"20px"} sx={{mr: {xs: "0", sm: "20px"}}}>
             <Box sx={{width: "100%"}}>
-              <img src={imgAPI} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
+              <img src={product.image_url} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
             </Box>
 
             <Typography variant='body2' sx={{textAlign: "justify"}}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              {product.product_description}
             </Typography>
           </Stack>
         </Grid>
 
         <Grid item xs={12} sm={6} md={7}>
           <Stack direction={"column"} sx={{width: "100%"}} spacing={"20px"}>
-            <Typography variant='h3'>Product Name</Typography>
+            <Typography variant='h3'>{product.product_name}</Typography>
 
             <Paper sx={{p: "20px",borderRadius: "20px"}}>
               <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>current price</Typography>
               <Stack direction={"row"} spacing={"10px"} sx={{mb: "20px"}}>
-                <Typography variant='h4' sx={{fontWeight: "700"}}>1000 LUX</Typography>
-                <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>$300.00</Typography>
+                <Typography variant='h4' sx={{fontWeight: "700"}}>{product.best_price && product.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: product.price_unit}).format( product.best_price ) : "N/A" }</Typography>
+                <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>{product.best_price && product.price_unit && rate ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format( product.best_price * rate ) : "N/A" }</Typography>
               </Stack>
               <Button variant='contained' sx={{width: "100%"}} onClick={()=>{setConfirming(true)}}>Buy</Button>
               
@@ -125,7 +112,7 @@ function makeid(length) {
                       boxShadow: 24,
                       p: 4,
                     }}>
-                      <Card notMove={true}/>
+                      <Card notMove={true} {...product}/>
                       <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
                         <Typography variant="h6">
                           Total: 
@@ -227,7 +214,7 @@ function makeid(length) {
       </Grid>
       <Box>
         <List
-         title={"Related Pieces"} link={''} items={[...Array(15)]}/>
+         title={"Related Pieces"} items={related}/>
       </Box>
     </>
   )

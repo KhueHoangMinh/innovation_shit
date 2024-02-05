@@ -13,6 +13,9 @@ import { botttsNeutral } from '@dicebear/collection';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { green, red } from '@mui/material/colors';
+import logo from '../assets/images/logo.png'
+import { backend } from '../constants';
+import Axios from 'axios';
 
 
 async function getImage(id) {
@@ -52,12 +55,22 @@ function Header() {
   const authState = useSelector(state => state.auth.user)
   const barState = useSelector(state => state.barState.isOpenning)
   const navItems = ['Home', 'About', 'Contact'];
-  const [scrollY,setSrollY] = useState(scrollDimension.scrollY*1.0/20)
+  const [scrollY,setSrollY] = useState(scrollDimension.scrollY*1.0/120)
   const [imgAPI,setImgAPI] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null);
+  const [rate, setRate] = useState(0)
 
   useEffect(()=>{
-    setSrollY(scrollDimension.scrollY*1.0/150)
+    Axios.get(backend+'/api/market_rate').then(res=>{
+      setRate(res.data.rate)
+    })
+  },[])
+
+  useEffect(()=>{
+
+
+
+    setSrollY(scrollDimension.scrollY*1.0/120)
     if(authState && authState.userId) getImage(authState.userId).then((api)=>setImgAPI(api))
   },[scrollDimension.scrollY, authState])
 
@@ -74,9 +87,9 @@ function Header() {
   return (
     <AppBar position="fixed" sx={{ 
       zIndex: (theme) => theme.zIndex.drawer + 1, 
-      boxShadow: scrollY > 0.1 ? "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)" : "none", 
-      transition: "0.3s ease-in-out", 
-      backgroundColor: `rgba(12,12,12,${scrollY})`,
+      boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)", 
+      transition: "0.2s ease-in-out", 
+      backgroundColor: `black`,
       backgroundImage: "none",
       height: "64px"
     }}>
@@ -97,8 +110,9 @@ function Header() {
             </IconButton>
           </Box>
           <Toolbar>
-            <Typography variant="h6" noWrap component="div">
-              Lux
+            <img src={logo} style={{height: "40px"}} alt=""/>
+            <Typography variant="h6" sx={{fontWeight: "600", display: {xs: "none", md: "block"}}} noWrap component="div">
+              Luxury NFT
             </Typography>
           </Toolbar>
         </Stack>
@@ -109,7 +123,7 @@ function Header() {
               <Divider orientation='vertical' sx={{m: "0 10px", display: {xs: "none", sm: "block"}}}/>
               <Typography variant='body1' sx={{color: "secondary.main", fontWeight: "700"}}> LUX 1</Typography>
               <Typography variant='body2' sx={{color: "secondary.dark", m: "0 5px"}}> = </Typography>
-              <Typography variant='body1' sx={{color: green[400], fontWeight: "700"}}> {new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format(1234.56)}</Typography>
+              <Typography variant='body1' sx={{color: green[400], fontWeight: "700"}}> {rate != 0 ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format(rate) : "N/A"}</Typography>
             </Box>
             {
               authState && authState.token ? 

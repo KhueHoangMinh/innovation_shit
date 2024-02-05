@@ -7,6 +7,9 @@ import { TransitionContext } from '../TransitionProvider';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { green } from '@mui/material/colors';
+import { backend } from '../../constants';
+import Axios from 'axios';
+import { useEffect } from 'react';
 
 
 function CardInfo(props) {
@@ -40,14 +43,25 @@ function Balance() {
       expiryDate: "",
       cvc: ""
     })
+    const [balance, setBalance] = useState(null)
+    const [cards, setCards] = useState([])
+  
+    useEffect(()=>{
+      Axios.get(backend+'/api/balance').then(res=>{
+        setBalance(res.data.total)
+      })
+      Axios.get(backend+'/api/cards').then(res=>{
+        setCards(res.data)
+      })
+    },[])
 
     return (
       <>
         <Stack direction={{xs: "column", md: "row"}} spacing={"20px"} sx={{ alignItems: "center", justifyContent: "space-between"}}>
           <Stack direction={"row"}>
-            <Typography variant='h5'>Total: </Typography>
+            <Typography variant='h5' sx={{mr: "10px"}}>Total: </Typography>
             <Typography variant='h6' sx={{fontWeight: "600"}}>
-              {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}
+              {balance ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(balance) : "N/A"}
             </Typography>
           </Stack>
           <Stack direction={"column"} spacing={"10px"} sx={{alignItems: "end"}}>
@@ -158,36 +172,14 @@ function Balance() {
           </Modal>
         </Stack>
         <Grid container spacing={"10px"} sx={{width: "100%"}}>
-          <Grid item xs={12} sm={6}>
-              <CardInfo card={{
-                type: "VISA",
-                cardNumber: "4111111111111111"
-              }}/>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-              <CardInfo card={{
-                type: "VISA",
-                cardNumber: "4111111111111111"
-              }}/>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-              <CardInfo card={{
-                type: "VISA",
-                cardNumber: "4111111111111111"
-              }}/>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-              <CardInfo card={{
-                type: "VISA",
-                cardNumber: "4111111111111111"
-              }}/>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-              <CardInfo card={{
-                type: "VISA",
-                cardNumber: "4111111111111111"
-              }}/>
-          </Grid>
+            {cards.map(card=>(
+              <Grid item xs={12} sm={6}>
+                <CardInfo card={{
+                  type: card.type,
+                  cardNumber: card.card_number
+                }}/>
+              </Grid>
+            ))}
         </Grid>
       </>
     )

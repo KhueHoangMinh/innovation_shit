@@ -38,7 +38,7 @@ export default function Login() {
       Axios.post(backend + '/api/login', {email: username, password: password})
       .then(res=>{
           if(res) {
-              const userData = {token: res.data.token, userId: res.data.user_id, type: res.data.type, avatar: res.data.avatar}
+              const userData = {token: res.data.token, userId: res.data.user_id, type: res.data.type, avatar: res.data.avatar, username: res.data.username, email: res.data.email}
               dispatch(authActions.login(userData))
               setStoredUser('User',userData,{path: '/'})
               Transition(()=>navigate(`/${userData.userId}/`))

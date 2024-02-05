@@ -7,7 +7,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { CarouselCard } from './Card';
 
-function Slider() {
+function Slider(props) {
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
     function getWindowDimensions() {
@@ -63,9 +63,9 @@ function Slider() {
         modules={[Autoplay]}
         className="mySwiper"
       >
-        {[...Array(10)].map(()=>(
+        {props.items.map((item)=>(
           <SwiperSlide style={{backgroundColor: "#121212", height: "fit-content", position: "relative", overflow: "hidden"}}>
-            <CarouselCard/>
+            <CarouselCard {...item}/>
           </SwiperSlide>
         ))}
       </Swiper>

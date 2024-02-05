@@ -6,23 +6,22 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
 import { red } from '@mui/material/colors';
 import { green } from '@mui/material/colors';
-
-
-function makeid(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-  }
+import { backend } from '../../constants';
+import Axios from 'axios';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 function Transactions() {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const [transactions, setTransactions] = useState([])
+  
+    useEffect(()=>{
+      Axios.get(backend+'/api/transactions').then(res=>{
+        setTransactions(res.data)
+      })
+    },[])
   
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
@@ -74,24 +73,6 @@ function Transactions() {
       format: (value) => value.toFixed(2),
     },
   ];
-  
-  function createData(name, code, population, size) {
-    const density = population / size;
-    return { name, code, population, size, density };
-  }
-  
-  const rows = Array(100).fill(
-    {
-      "token_id": "0x" + makeid(15),
-      "token_name": "LUX",
-      "sender": "0x" + makeid(15),
-      "receiver": "0x" + makeid(15),
-      "hash": "0x" + makeid(15),
-      "timestamp": "2024-01-30T12:34:56Z",
-      "fee": `${Math.random()} ETH`,
-      "signature": "0x" + makeid(15)
-    });
-  
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -149,7 +130,7 @@ function Transactions() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {transactions
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     return (
@@ -175,7 +156,7 @@ function Transactions() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={transactions.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

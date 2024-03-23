@@ -6,6 +6,7 @@ import './index.css'
 import { Provider } from 'react-redux';
 import store from './store'
 import io from 'socket.io-client'
+import { Auth0Provider } from '@auth0/auth0-react';
 
 // window.baseHost = 'https://tradey-387014.el.r.appspot.com/'
 // window.baseHost = 'http://192.168.6.60:3001/'
@@ -28,7 +29,16 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
-      <App />
+      <Auth0Provider
+          domain="dev-0z36s1mxvz4zq3zh.us.auth0.com"
+          clientId="lztBoCSHhRsTFF3sn8p0hbMhJL22ASwt"
+          authorizationParams={{
+            audience: "https://hello-world.example.com",
+            redirect_uri: window.location.origin,
+          }}
+        >
+        <App />
+      </Auth0Provider>
     </React.StrictMode>
   </Provider>
 );

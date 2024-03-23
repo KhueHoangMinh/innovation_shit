@@ -16,6 +16,7 @@ import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { TransitionContext } from '../TransitionProvider'
 import { backend } from '../../constants'
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 export default function Login() {
@@ -29,10 +30,40 @@ export default function Login() {
   
   // transition
   const navigate = useNavigate()
-  const user = useSelector(state=>state.auth.user)
+  // const user = useSelector(state=>state.auth.user)
   const Transition = useContext(TransitionContext)
   // const auth = getAuth(app)
   // const provider = new GoogleAuthProvider()
+
+
+
+
+  const { loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
+
+  useEffect(()=>{
+    console.log(user, isAuthenticated, isLoading)
+    let isMounted = true;
+    const getMessage = async () => {
+      if (!isMounted) {
+        return;
+      }
+      if(user && isAuthenticated) {
+        const accessToken = await getAccessTokenSilently();
+        console.log(accessToken)
+      } else {
+        console.log("not logged in")
+      }
+    };
+
+    getMessage();
+    return () => {
+      isMounted = false;
+    };
+  },[user, isAuthenticated, isLoading])
+
+
 
   // store user to cookie, not yet implemented
   const [storedUser, setStoredUser] = useCookies(['user'])

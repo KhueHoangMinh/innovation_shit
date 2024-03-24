@@ -133,25 +133,25 @@ export default function MainLayout(props) {
   const [menuItems, setMenuItems] = React.useState([
     {
       label: "Home",
-      link: "/0",
+      link: "/home",
       pathRegex: /^\/[\w.]*\/?$/,
       logo: <HomeIcon/>
     },
     {
       label: "Trade",
-      link: "/0/trade",
+      link: "/trade",
       pathRegex: /^\/[\w.]*\/trade\/?$/,
       logo: <CurrencyExchangeIcon/>
     },
     {
       label: "Gallery",
-      link: "/0/gallery",
+      link: "/gallery",
       pathRegex: /^\/[\w.]*\/gallery\/?$/,
       logo: <AppsIcon/>
     },
     {
       label: "Search",
-      link: "/0/search",
+      link: "/search",
       pathRegex: /^\/[\w.]*\/search\/?$/,
       logo: <SearchIcon/>
     },
@@ -160,7 +160,7 @@ export default function MainLayout(props) {
     },
     {
       label: "Account",
-      link: "/0/account",
+      link: "/account",
       pathRegex: /^\/[\w.]*\/account\/?$/,
       logo: <AccountCircleIcon/>
     }

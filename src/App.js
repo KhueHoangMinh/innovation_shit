@@ -38,15 +38,15 @@ function App() {
                 <Routes>
                     {/* <Route path='/' element={<><HomePage/></>}/> */}
                     <Route path='/' element={<AuthPage/>}/>
-                    <Route path="/:userId" element={<>
+                    <Route path="/" element={<>
                       <MainLayout/>
                     </>}>
-                      <Route path="/:userId/" element={<HomePage/>}/>
-                      <Route path="/:userId/trade/" element={<TradePage/>}/>
-                      <Route path="/:userId/gallery/" element={<GalleryPage/>}/>
-                      <Route path="/:userId/gallery/:itemId" element={<ProductPage/>}/>
-                      <Route path="/:userId/search/" element={<SearchPage/>}/>
-                      <Route path="/:userId/account/" element={<AccountPage/>}/>
+                      <Route path="/home" element={<HomePage/>}/>
+                      <Route path="/trade/" element={<TradePage/>}/>
+                      <Route path="/gallery/" element={<GalleryPage/>}/>
+                      <Route path="/gallery/:itemId" element={<ProductPage/>}/>
+                      <Route path="/search/" element={<SearchPage/>}/>
+                      <Route path="/account/" element={<AccountPage/>}/>
                     </Route>
                   <Route path='*' element={<ErrorPage/>} />
                 </Routes>

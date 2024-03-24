@@ -30,13 +30,14 @@ function Head() {
   useEffect(()=>{
 
     // get user's balance from server
-    Axios.get(backend+'/api/balance').then(res=>{
-      setBalance(res.data.total)
+    Axios.get(backend+'/api/wallet/abc').then(res=>{
+      setBalance(res.data.balance)
     })
 
     // get user's transactions from server
-    Axios.get(backend+'/api/transactions_length').then(res=>{
-      setTransactions(res.data.transactions)
+    Axios.get(backend+'/api/wallet/transactions/abc').then(res=>{
+      console.log(res.data)
+      setTransactions(res.data)
     })
 
     // get user's archived products from server
@@ -63,13 +64,14 @@ function Head() {
                   "&::before": {content: "''", paddingTop: "100%", display: "block"}
               }}
           >
-              <img src={imgAPI} style={{position: "absolute", top: 0, left: 0, height: "100%", width: "100%"}}/>
+            {console.log(authState)}
+              <img src={authState ? authState.picture : ""} style={{position: "absolute", top: 0, left: 0, height: "100%", width: "100%"}}/>
           </Box>
           <Stack direction={"column"} spacing={"5px"} sx={{flexGrow: 1}}>
-            <Typography variant='h4' sx={{color: "secondary.main", fontWeight: "600"}}>{authState && authState.username}</Typography>
-            <Typography variant='body1' sx={{color: "secondary.dark"}}>{authState && authState.token}</Typography>
+            <Typography variant='h4' sx={{color: "secondary.main", fontWeight: "600"}}>{authState && authState.name}</Typography>
+            {/* <Typography variant='body1' sx={{color: "secondary.dark"}}>{authState && authState.token}</Typography> */}
             <Typography variant='body1' sx={{color: "secondary.dark"}}>{authState && authState.email}</Typography>
-            <Stack direction={{sx:"column", md: "row"}} spacing={"20px"} sx={{width: "100%", height: "100%", justifyContent: "space-around", alignItems: "center"}}>
+            <Stack direction={{sx:"column", md: "row"}} sx={{width: "100%", height: "100%", alignItems: "center", display: "grid", gridTemplateColumns: "1fr 30px 1fr"}}>
                 <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
                   <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Balance</Typography>
                   <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>{balance ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(balance) : "N/A"}</Typography>
@@ -77,12 +79,7 @@ function Head() {
                 <Divider orientation='vertical' sx={{height: "60%"}}/>
                 <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
                   <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Transactions</Typography>
-                  <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>{transactions ? transactions : "N/A"}</Typography>
-                </Stack>
-                <Divider orientation='vertical' sx={{height: "60%"}}/>
-                <Stack direction={"column"} spacing={"10px"} sx={{justifyContent: "center", alignItems: "center"}}>
-                  <Typography variant='h6' sx={{color: "secondary.dark", fontWeight: "600"}}>Archived</Typography>
-                  <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>{archived ? archived : "N/A"}</Typography>
+                  <Typography variant='h5' sx={{color: "secondary.main", fontWeight: "700"}}>{transactions ? transactions.length : "N/A"}</Typography>
                 </Stack>
             </Stack>
           </Stack>

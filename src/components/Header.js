@@ -16,6 +16,8 @@ import { green, red } from '@mui/material/colors';
 import logo from '../assets/images/logo.png'
 import { backend } from '../constants';
 import Axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
+import { authActions } from '../store/auth-slice';
 
 
 async function getImage(id) {
@@ -56,9 +58,11 @@ function Header() {
 
   // define dispatch function to send actions to redux
   const dispatch = useDispatch()
+  
+  const { logout } = useAuth0();
 
   // get the current authentication state
-  const authState = useSelector(state => state.auth.user)
+  const authState = useSelector(state => state.auth)
 
   // open/slose state of the sidebar
   const barState = useSelector(state => state.barState.isOpenning)
@@ -141,12 +145,12 @@ function Header() {
               <Typography variant='body1' sx={{color: green[400], fontWeight: "700"}}> {rate != 0 ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format(rate) : "N/A"}</Typography>
             </Box>
             {
-              authState && authState.token ? 
+              authState.user ? 
               <>
                 <Box sx={{height: "60%", borderRadius: "10px", overflow: "hidden", cursor: "pointer", aspectRatio: "1/1", transition: "0.2s ease-in-out", "&:hover": {filter: "brightness(1.2)"}}}
                   onClick={handlePopover}
                 >
-                  <img style={{width: "100%", height: "100%", objectFit: "cover" }} src={imgAPI}/>
+                  <img style={{width: "100%", height: "100%", objectFit: "cover" }} src={authState.user.picture}/>
                 </Box>
                 
                 <Menu
@@ -157,10 +161,14 @@ function Header() {
                   transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                  <MenuItem onClick={()=>{Transition(()=>navigate(`/${authState.userId}/account`))}}>
+                  <MenuItem onClick={()=>{Transition(()=>navigate('/account'))}}>
                     <AccountCircleIcon sx={{mr: "10px"}}/>Account
                   </MenuItem>
-                  <MenuItem onClick={()=>{Transition(()=>navigate("/"))}}>
+                  <MenuItem onClick={()=>{
+                    // Transition(()=>navigate("/"))
+                      dispatch(authActions.logout())
+                      logout({ logoutParams: { returnTo: window.location.origin } })
+                    }}>
                     <LogoutIcon sx={{color: red[500], mr: "10px"}}/>Log out
                   </MenuItem>
                 </Menu>

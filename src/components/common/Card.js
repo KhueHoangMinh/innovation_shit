@@ -20,6 +20,8 @@ function makeid(length) {
   return result;
 }
 
+const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+
 // get random image from dicebear library
 async function getImage() {
   const img = await createAvatar(botttsNeutral, {
@@ -79,11 +81,11 @@ function CarouselCard(props) {
     }
   `
   return(
-    <CardContainer onClick={()=>handleItemClick("/0/gallery/" + props.product_id)}>
+    <CardContainer onClick={()=>handleItemClick("/gallery/" + props.id)}>
       <div>
-        <img src={props.image_url}/>
+        <img src={props.image}/>
         <Box sx={{position: "absolute", height: "fit-content", width: "100%", bottom: 0, p: "10px", pt: "50%", background: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0))"}}>
-          <Typography variant='h6' noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.product_name}</Typography>
+          <Typography variant='h6' noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.title}</Typography>
           <Typography variant='body1' noWrap={true} sx={{maxWidth: "calc(100% - 20px)",color: "#bbbbbb", fontWeight: "600"}}>{props.product_description}</Typography>
         </Box>
       </div>
@@ -200,24 +202,24 @@ function Card(props) {
   }
 
   return (
-    <Card onClick={()=>{handleItemClick("/0/gallery/" + props.product_id)}}>
+    <Card onClick={()=>{handleItemClick("/gallery/" + props.id)}}>
       <div>
         <Box>
-          <img src={props.image_url}/>
+          <img src={props.image}/>
         </Box>
         <Box sx={{p: "15px",display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#202020", "&:hover": {backgroundColor: "#303030"}}}>
-          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.product_name}</Typography>
+          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.title}</Typography>
           <Grid container sx={{width: "100%", height: "fit-content"}}>
             <Grid item xs={6}>
-              <Typography variant='body2' sx={{color: "secondary.dark"}}>Floor</Typography>
+              <Typography variant='body2' sx={{color: "secondary.dark"}}>Price</Typography>
               <Typography variant='body1' sx={{fontWeight: "700"}}>
-                {props.best_price && props.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: props.price_unit}).format( props.best_price ) : "N/A" }
+                {props.price  ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format( props.price ) : "N/A" }
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant='body2' sx={{color: "secondary.dark"}}>Total Volume</Typography>
+              <Typography variant='body2' sx={{color: "secondary.dark"}}>Avg</Typography>
               <Typography variant='body1' sx={{fontWeight: "700"}}>
-                {props.volume && props.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: props.price_unit}).format(props.volume) : "N/A"}
+                {props.priceHistory ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(average(props.priceHistory)) : "N/A"}
               </Typography>
             </Grid>
           </Grid>

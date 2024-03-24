@@ -1,7 +1,8 @@
-import { FormControl, Grid, Stack, TextField, Typography } from '@mui/material'
+import { Box, FormControl, Grid, Stack, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { backend } from '../../constants';
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 // inline edit component
 function EditableInfo(props) {
@@ -9,10 +10,24 @@ function EditableInfo(props) {
   // editting/viewing state
   const [editting, setEditting] = useState(false)
 
+  const [original, setOriginal] = useState("")
+
   // editting value
   const [value, setValue] = useState("")
 
+  const authState = useSelector(state => state.auth)
+
+  const save = () => {
+    if(authState && authState.user) {
+      Axios.put(backend + '/api/user/' + authState.user.sub, {[props.name]: value})
+    }
+
+    setEditting(false)
+    setOriginal(value)
+  }
+
   useEffect(()=>{
+    setOriginal(props.value)
     setValue(props.value)
   },[])
 
@@ -28,18 +43,25 @@ function EditableInfo(props) {
             </>
             : 
             <>
-              <Typography variant='body1' noWrap={false} sx={{height: "fit-content",padding: "6px"}}>{value}</Typography>
+              <Typography variant='body1' noWrap={false} sx={{height: "fit-content",padding: "6px"}}>{original}</Typography>
             </>
           }
         </Stack>
       </FormControl>
+      
+        <Stack direction='horizontal'>
         {
         editting ? 
           <>
-            <Typography variant="body2" sx={{transition: "0.2s ease-in-out", cursor: "pointer", color: "secondary.dark", "&:hover": {color: "secondary.light"}}} onClick={()=>{
-              setEditting(false)
+            <Typography variant="body2" sx={{marginRight: "10px", transition: "0.2s ease-in-out", cursor: "pointer", color: "secondary.dark", "&:hover": {color: "secondary.light"}}} onClick={()=>{
+              save()
             }}>
               Save
+            </Typography>
+            <Typography variant="body2" sx={{transition: "0.2s ease-in-out", cursor: "pointer", color: "primary.dark", "&:hover": {color: "primary.light"}}} onClick={()=>{
+              setEditting(false)
+            }}>
+              Cancel
             </Typography>
           </>
           : 
@@ -49,6 +71,7 @@ function EditableInfo(props) {
             </Typography>
           </>
         }
+        </Stack>
     </Stack>
   )
 }
@@ -69,25 +92,25 @@ function Information(props) {
     <>
       <Grid container spacing={"10px"} sx={{width: "100%"}}>
         <Grid item xs={12} sm={6}>
-            <EditableInfo label={"First name: "} value={details.first_name ? details.first_name : "N/A"}/>
+            <EditableInfo label={"First name: "} name={"first_name"} value={details.first_name ? details.first_name : "N/A"}/>
         </Grid>
         <Grid item xs={12} sm={6}>
-            <EditableInfo label={"Last name: "} value={details.last_name ? details.last_name : "N/A"}/>
+            <EditableInfo label={"Last name: "} name={"last_name"} value={details.last_name ? details.last_name : "N/A"}/>
         </Grid>
         <Grid item xs={12} sm={6}>
-            <EditableInfo label={"User name: "} value={details.username ? details.username : "N/A"}/>
+            <EditableInfo label={"User name: "} name={"username"} value={details.username ? details.username : "N/A"}/>
         </Grid>
         <Grid item xs={12} sm={6}>
-            <EditableInfo label={"Birth: "} value={details.birth ? details.birth : "N/A"}/>
+            <EditableInfo label={"Birth: "} name={"birth"} value={details.birth ? details.birth : "N/A"}/>
         </Grid>
         <Grid item xs={12} md={6}>
-            <EditableInfo label={"Email: "} value={details.email ? details.email : "N/A"}/>
+            <EditableInfo label={"Email: "} name={"email"} value={details.email ? details.email : "N/A"}/>
         </Grid>
         <Grid item xs={12} md={6}>
-            <EditableInfo label={"Phone: "} value={details.phone ? details.phone : "N/A"}/>
+            <EditableInfo label={"Phone: "} name={"phone"} value={details.phone ? details.phone : "N/A"}/>
         </Grid>
         <Grid item xs={12} md={12}>
-            <EditableInfo label={"Address: "} value={details.address ? details.address : "N/A"}/>
+            <EditableInfo label={"Address: "} name={"address"} value={details.address ? details.address : "N/A"}/>
         </Grid>
       </Grid>
     </>

@@ -10,7 +10,7 @@ function Archive() {
 
   useEffect(()=>{
     // get mock data from server
-    Axios.get(backend+'/api/archived').then(res=>{
+    Axios.get(backend+'/api/product/test/related').then(res=>{
       setArchived(res.data)
     })
   },[])

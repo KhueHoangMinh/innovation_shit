@@ -1,14 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import styled from '@emotion/styled'
 import {useDispatch, useSelector} from 'react-redux'
 import { useState, useEffect } from 'react'
 import {Form, useNavigate} from 'react-router-dom'
 import { authActions } from '../store/auth-slice'
 import {useCookies} from 'react-cookie'
-import { Typography, CssBaseline, Grid, Box, Link, Divider, Fade, Grow } from '@mui/material'
+import { Typography, CssBaseline, Grid, Box, Link, Divider, Fade, Grow, Button } from '@mui/material'
 import logo from '../assets/images/logo.png'
 import Login from './authPage/Login'
 import Register from './authPage/Register'
+import auth0Logo from '../assets/images/auth0.png'
 import { CarouselCard, CarouselLanding } from './common/Card';
 
 
@@ -20,6 +21,10 @@ import 'swiper/css/pagination';
 
 import { Autoplay, EffectCoverflow} from 'swiper/modules';
 
+
+import { useAuth0 } from "@auth0/auth0-react";
+import { TransitionContext } from './TransitionProvider'
+
 // style of the background
 const Bg = styled.div`
 
@@ -28,6 +33,7 @@ const Bg = styled.div`
   position: absolute;
   transform-origin: middle middle;
   transform: rotate(-45deg) scale(1.4);
+  filter: brightness(0.3) blur(3px);
 `
 
 // the landing and authentication page
@@ -35,43 +41,40 @@ export default function AuthPage(props) {
 
   // define dispatch function to send actions to redux
   const dispatch = useDispatch()
-
-  // get current user information to check if user is logged in
-  const user = useSelector(state=>state.auth.user)
-  // const auth = getAuth(app)
-  // const provider = new GoogleAuthProvider()
-  const [storedUser, setStoredUser] = useCookies(['user'])
-  const bgRef = useRef(null)
-  const [isLogin, setIsLogin] = useState(true)
-  var canvasLoaded = false
-
-  const handleRegister = ()=> {
-    setIsLogin(!isLogin)
-  }
-
-  useEffect(()=>{
-
-    // check the user's login state
-    if(storedUser.User && storedUser.User !== 'null') {
-      dispatch(authActions.login({user_id: storedUser.User.user_id, type: storedUser.User.type, displayName: storedUser.User.displayName, email: storedUser.User.email, photourl: storedUser.User.photoURL}))
-      // window.socket.emit('online')
-    } else {
-      setStoredUser('User',null,{path: '/'})
-      dispatch(authActions.logout())
-      // navigate('/')
-    }
-
-  },[])
   
+  // transition
+  const navigate = useNavigate()
+  // const user = useSelector(state=>state.auth.user)
+  const Transition = useContext(TransitionContext)
+
+  
+  const { loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
+
   useEffect(()=>{
-    if(user) {
-    //   navigate('/home')
-    } else {
-      // navigate('/')
+    if(!isLoading && user) {
+      Transition(()=>navigate(`/home`))
     }
-},[user])
+    const checkloggin = async () => {
+      // get current user information to check if user is logged in
+      if(user && isAuthenticated) {
+        const accessToken = await getAccessTokenSilently();
 
+        dispatch(authActions.login({
+          user: user,
+          token: accessToken
+        }))
 
+        console.log(accessToken)
+        Transition(()=>navigate(`/home`))
+      } else {
+        console.log("not logged in")
+      }
+    };
+
+    checkloggin();
+  },[user, isAuthenticated, isLoading])
 
   return (
       <React.Fragment>
@@ -165,45 +168,33 @@ export default function AuthPage(props) {
             </Box>
           </Bg>
         </Box>
-        <Grid container spacing={0} sx={{ 
-            m: 0,
-            p: 0,
-            height: "100%"
-            }}>
-            <Grid item xs={{display: "none"}} md={6} lg={8} sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column"
-
-            }}>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-                <Box sx={{
-                    bgcolor: "rgba(0,0,0,0.8)",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                    position: "relative",
-                    backdropFilter: "blur(5px)",
-                    zIndex: 10
-                    }}>
-                    <img height={"120px"} style={{objectFit: "contain"}} src={logo} alt='Lux'/>
-
-                    <Box sx={{width: "80%"}}>
-                        <Grow sx={{display: isLogin ? "block" : "none"}} in={isLogin}><Box><Login/></Box></Grow>
-                        <Grow sx={{display: !isLogin ? "block" : "none"}} in={!isLogin}><Box><Register setIsLogin={setIsLogin}/></Box></Grow>
-                    </Box>
-
-                    <Divider sx={{width: "80%"}}><span style={{color: "#757575"}}>Or</span></Divider>
-
-                    <Box sx={{display: "flex", justifyContent: "center"}}><Link sx={{cursor: "pointer"}} onClick={handleRegister}>{isLogin ? "Register now" : "Login now"}</Link></Box>
-                    <Box sx={{color: "#757575", fontSize: "15px", fontStyle: "italic"}}>© Lux - 2024</Box>
-                </Box>
-            </Grid>
-        </Grid>
+        <Box sx={{
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+          <Box sx={{
+              bgcolor: "transparent",
+              height: "fit-content",
+              width: "40%",
+              maxWidth: "500px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              position: "relative",
+              padding: "30px",
+              zIndex: 10
+              }}>
+              <img height={"120px"} style={{objectFit: "contain", marginBottom: "40px"}} src={logo} alt='Lux'/>
+              <Button variant='contained' color='secondary' className='normal-login' type='submit' style={{marginBottom: "40px", width: "100%"}} onClick={()=>loginWithRedirect()}>
+                Login with Auth0
+                <img src={auth0Logo} style={{height: "25px", marginLeft: "10px"}} alt=""/>  
+              </Button>
+              <Box sx={{color: "#757575", fontSize: "15px", fontStyle: "italic"}}>© Lux - 2024</Box>
+          </Box>
+        </Box>
       </React.Fragment>
   )
 }

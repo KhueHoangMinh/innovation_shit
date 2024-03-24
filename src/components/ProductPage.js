@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Grid, Link, Modal, Paper, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Grid, Link, Modal, Paper, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { List } from './common/List';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -6,6 +6,7 @@ import { Card } from './common/Card';
 import Chart from "react-apexcharts";
 import Axios from 'axios';
 import { backend } from '../constants';
+import { useParams } from 'react-router-dom';
 
 function ProductInfo(props) {
   return (
@@ -33,25 +34,58 @@ function ProductPage() {
   // store values from server
   const [related, setRelated] = useState([])
   const [product, setProduct] = useState({})
-  const [rate, setRate] = useState(null)
+  const [balance, setBalance] = useState(0)
+  const [rate, setRate] = useState(1234.56)
+  const [key, setKey] = useState("")
+  const params = useParams()
 
   useEffect(()=>{
     // get product list mock data from server
-    Axios.get(backend+'/api/product_list').then(res=>{
+    Axios.get(backend+'/api/product/' + params.itemId + '/related').then(res=>{
+      console.log(res.data)
       setRelated(res.data)
+    })
+
+    
+    Axios.get(backend+'/api/wallet/abc').then(res=>{
+      console.log(res.data)
+      setBalance(res.data.balance)
     })
     
     // get product mock data from server
-    Axios.get(backend+'/api/product').then(res=>{
+    Axios.get(backend+'/api/product/' + params.itemId).then(res=>{
       setProduct(res.data)
+      setChartData({
+        options: {
+          chart: {
+            id: "basic-bar",
+          },
+          xaxis: {
+            categories: []
+          }
+        },
+        series: [
+          {
+            name: "Price",
+            data: res.data.priceHistory
+          }
+        ]
+      })
     })
+
     
     // get market rate mock data from server
-    Axios.get(backend+'/api/market_rate').then(res=>{
-      setRate(res.data.rate)
-    })
+    // Axios.get(backend+'/api/market_rate').then(res=>{
+    //   setRate(res.data.rate)
+    // })
   },[])
   
+  const purchase = () => {
+    Axios.put(backend+'/api/product/' + params.itemId,{private_key: key}).then(res=>{
+      console.log(res.data)
+    })
+  }
+
   // open/close of confirm buying modal
   const [confirming, setConfirming] = useState(false)
 
@@ -65,12 +99,14 @@ function ProductPage() {
         id: "basic-bar",
       },
       xaxis: {
-        categories: [,"27/1","28/1","29/1","30/1","31/1","1/2","2/2","3/2"]
+        categories: [
+          // "27/1","28/1","29/1","30/1","31/1","1/2","2/2","3/2"
+        ]
       }
     },
     series: [
       {
-        name: "series-1",
+        name: "Price",
         data: [300, 400, 450, 500, 490, 600, 700, 1000]
       }
     ]
@@ -83,24 +119,24 @@ function ProductPage() {
         <Grid item xs={12} sm={6} md={5}>
           <Stack direction={"column"} spacing={"20px"} sx={{mr: {xs: "0", sm: "20px"}}}>
             <Box sx={{width: "100%"}}>
-              <img src={product.image_url} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
+              <img src={product.image} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
             </Box>
 
             <Typography variant='body2' sx={{textAlign: "justify"}}>
-              {product.product_description}
+              {product.description}
             </Typography>
           </Stack>
         </Grid>
 
         <Grid item xs={12} sm={6} md={7}>
           <Stack direction={"column"} sx={{width: "100%"}} spacing={"20px"}>
-            <Typography variant='h3'>{product.product_name}</Typography>
+            <Typography variant='h3'>{product.title}</Typography>
 
             <Paper sx={{p: "20px",borderRadius: "20px"}}>
               <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>current price</Typography>
               <Stack direction={"row"} spacing={"10px"} sx={{mb: "20px"}}>
-                <Typography variant='h4' sx={{fontWeight: "700"}}>{product.best_price && product.price_unit ? new Intl.NumberFormat('en-IN', {style: "currency", currency: product.price_unit}).format( product.best_price ) : "N/A" }</Typography>
-                <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>{product.best_price && product.price_unit && rate ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format( product.best_price * rate ) : "N/A" }</Typography>
+                <Typography variant='h4' sx={{fontWeight: "700"}}>{product.price ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format( product.price ) : "N/A" }</Typography>
+                <Typography variant='body2' color={"secondary.dark"} sx={{fontWeight: "600"}}>{product.price && rate ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "USD"}).format( product.price * rate ) : "N/A" }</Typography>
               </Stack>
               <Button variant='contained' sx={{width: "100%"}} onClick={()=>{setConfirming(true)}}>Buy</Button>
               
@@ -129,15 +165,7 @@ function ProductPage() {
                           Total: 
                         </Typography>
                         <Typography variant="h6">
-                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}
-                        </Typography>
-                      </Stack>
-                      <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
-                        <Typography variant="h6">
-                          Payment: 
-                        </Typography>
-                        <Typography variant="h6">
-                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(1000)}
+                          {product.price ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format( product.price ) : "N/A" }
                         </Typography>
                       </Stack>
                       <Stack direction={"row"} sx={{justifyContent: "space-between", alignItems: "center"}}>
@@ -145,14 +173,16 @@ function ProductPage() {
                           New balance: 
                         </Typography>
                         <Typography variant="body1">
-                          {new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format(0)}
+                          {product.price && balance ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format( balance - product.price ) : "N/A" }
                         </Typography>
                       </Stack>
                       <Stack direction={"row"} spacing={"10px"} sx={{alignItems: "center"}}>
                         <Checkbox checked={confirmed} onChange={e=>{setConfirmed(e.target.checked)}} sx={{padding: "0"}}/>
                         <Typography variant='body2'>I agreed with Lux's <Link sx={{cursor: "pointer"}}>Terms & Policy</Link></Typography>
                       </Stack>
-                      <Button disabled={!confirmed} variant='contained' onClick={()=>{
+                      <TextField variant='outlined' label='Private key' onChange={(e)=>setKey(e.target.value)}/>
+                      <Button disabled={!confirmed || key === ""} variant='contained' onClick={()=>{
+                        purchase()
                         setConfirming(false)
                       }}>Confirm</Button>
                     </Stack>
@@ -174,7 +204,7 @@ function ProductPage() {
                     series={chartData.series}
                     type="line"
                     height={300}
-                    style={{width: "100%"}}
+                    style={{width: "100%", color: "black"}}
                   />
                 </AccordionDetails>
               </Accordion>

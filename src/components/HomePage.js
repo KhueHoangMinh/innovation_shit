@@ -21,7 +21,7 @@ function HomePage(props) {
     if(user && isAuthenticated) {
       const accessToken = getAccessTokenSilently()
       // get product lists from server
-      Axios.get(backend+'/api/gallery',[],{
+      Axios.post(backend+'/api/gallery',[],{
         headers: {
           "content-type": "application/json",
           "Authorization": `Bearer ${accessToken}`,

@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Card } from './common/Card';
 import Chart from "react-apexcharts";
 import Axios from 'axios';
-import { backend } from '../constants';
+import { domain, backend } from '../constants';
 import { useParams } from 'react-router-dom';
 
 function ProductInfo(props) {
@@ -41,7 +41,7 @@ function ProductPage() {
 
   useEffect(()=>{
     // get product list mock data from server
-    Axios.get(backend+'/api/product/' + params.itemId + '/related').then(res=>{
+    Axios.post(backend+'/api/product/' + params.itemId + '/related').then(res=>{
       console.log(res.data)
       setRelated(res.data)
     })
@@ -53,7 +53,11 @@ function ProductPage() {
     })
     
     // get product mock data from server
-    Axios.get(backend+'/api/product/' + params.itemId).then(res=>{
+    Axios.get(backend+'/api/product/' + params.itemId, {}, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res=>{
       setProduct(res.data)
       setChartData({
         options: {
@@ -119,7 +123,7 @@ function ProductPage() {
         <Grid item xs={12} sm={6} md={5}>
           <Stack direction={"column"} spacing={"20px"} sx={{mr: {xs: "0", sm: "20px"}}}>
             <Box sx={{width: "100%"}}>
-              <img src={product.image} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
+              <img src={"https://" + domain + product.image} style={{width: "100%", overflow: "hidden", borderRadius: "20px"}}/>
             </Box>
 
             <Typography variant='body2' sx={{textAlign: "justify"}}>
@@ -216,7 +220,7 @@ function ProductPage() {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  Accordion 2
+                  Categories
                 </AccordionSummary>
                 <AccordionDetails>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
@@ -234,7 +238,7 @@ function ProductPage() {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  Accordion 3
+                  Sales
                 </AccordionSummary>
                 <AccordionDetails>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse

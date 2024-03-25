@@ -6,6 +6,7 @@ import { lorelei, botttsNeutral } from '@dicebear/collection';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { TransitionContext } from '../TransitionProvider';
+import { image_domain } from '../../constants';
 
 // randomized an ID for dicebear image generator
 function makeid(length) {
@@ -83,10 +84,10 @@ function CarouselCard(props) {
   return(
     <CardContainer onClick={()=>handleItemClick("/gallery/" + props.id)}>
       <div>
-        <img src={props.image}/>
+        <img src={"https://" + image_domain + props.image}/>
         <Box sx={{position: "absolute", height: "fit-content", width: "100%", bottom: 0, p: "10px", pt: "50%", background: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0))"}}>
           <Typography variant='h6' noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.title}</Typography>
-          <Typography variant='body1' noWrap={true} sx={{maxWidth: "calc(100% - 20px)",color: "#bbbbbb", fontWeight: "600"}}>{props.product_description}</Typography>
+          <Typography variant='body2' noWrap={true} sx={{maxWidth: "calc(100% - 20px)",color: "secondary.main", fontWeight: "600"}}>{props.price  ? new Intl.NumberFormat('en-IN', {style: "currency", currency: "LUX"}).format( props.price ) : "N/A" }</Typography>
         </Box>
       </div>
     </CardContainer>
@@ -143,7 +144,7 @@ function CarouselLanding(props) {
   return(
     <CardContainer>
       <div>
-        <img src={imgAPI}/>
+        <img src={"https://" + image_domain + props.image}/>
       </div>
     </CardContainer>
   )
@@ -175,14 +176,26 @@ function Card(props) {
       left: 0;
 
 
-      & > div {
-        position: relative;
+      & > .img-container {
         height: 100%;
         width: 100%;
         object-fit: contain;
         & > img {
           position: absolute;
           width: 100%;  
+        }
+      }
+      
+      & > .content-container {
+        width: 100%;
+        position: relative;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #202020;
+        &:hover {
+          background-color: #303030
         }
       }
     }
@@ -202,13 +215,13 @@ function Card(props) {
   }
 
   return (
-    <Card onClick={()=>{handleItemClick("/gallery/" + props.id)}}>
+    <Card sx={{position: "relative"}} onClick={()=>{handleItemClick("/gallery/" + props.id)}}>
       <div>
-        <Box>
-          <img src={props.image}/>
+        <Box className="img-container">
+          <img src={"https://" + image_domain + props.image}/>
         </Box>
-        <Box sx={{p: "15px",display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#202020", "&:hover": {backgroundColor: "#303030"}}}>
-          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(100% - 20px)", fontWeight: "700"}}>{props.title}</Typography>
+        <Box className="content-container" sx={{width: "100%", position: "relative", p: "15px",display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#202020", "&:hover": {backgroundColor: "#303030"}}}>
+          <Typography variant="h6" noWrap={true} sx={{maxWidth: "calc(250px - 20px)", fontWeight: "700"}}>{props.title}</Typography>
           <Grid container sx={{width: "100%", height: "fit-content"}}>
             <Grid item xs={6}>
               <Typography variant='body2' sx={{color: "secondary.dark"}}>Price</Typography>

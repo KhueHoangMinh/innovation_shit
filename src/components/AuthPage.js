@@ -63,7 +63,27 @@ export default function AuthPage(props) {
       if(user && isAuthenticated) {
         const accessToken = await getAccessTokenSilently();
 
-        const storedUser = await Axios.get(backend + '/api/user/' + user.sub)
+        console.log(`Bearer ${accessToken}`)
+
+        var storedUser = null
+
+        try {
+          storedUser = await Axios.get(backend + '/api/user/' + user.sub ,{
+            headers: {
+              "Access-Control-Allow-Headers": "Authorization",
+              "content-type": "application/json",
+              "Authorization": `Bearer ${accessToken}`
+            }
+          })
+        } catch (err) {
+          storedUser = await Axios.post(backend + '/api/user', {username: user.name, email: user.email}, {
+            headers: {
+              "Access-Control-Allow-Headers": "Authorization",
+              "content-type": "application/json",
+              "Authorization": `Bearer ${accessToken}`
+            }
+          })
+        }
 
 
         dispatch(authActions.login({
@@ -72,7 +92,7 @@ export default function AuthPage(props) {
           wallet: storedUser && storedUser.walletAddress ? storedUser.walletAddress : null
         }))
 
-        console.log(accessToken)
+        console.log(storedUser)
         Transition(()=>navigate(`/home`))
       } else {
         console.log("not logged in")

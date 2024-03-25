@@ -11,6 +11,8 @@ import Login from './authPage/Login'
 import Register from './authPage/Register'
 import auth0Logo from '../assets/images/auth0.png'
 import { CarouselCard, CarouselLanding } from './common/Card';
+import Axios from 'axios';
+import { backend } from '../constants';
 
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -61,9 +63,13 @@ export default function AuthPage(props) {
       if(user && isAuthenticated) {
         const accessToken = await getAccessTokenSilently();
 
+        const storedUser = await Axios.get(backend + '/api/user/' + user.sub)
+
+
         dispatch(authActions.login({
           user: user,
-          token: accessToken
+          token: accessToken,
+          wallet: storedUser && storedUser.walletAddress ? storedUser.walletAddress : null
         }))
 
         console.log(accessToken)

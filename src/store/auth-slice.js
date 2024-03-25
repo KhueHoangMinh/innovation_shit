@@ -5,16 +5,25 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
         user: null,
-        token: null
+        token: null,
+        wallet: null
     },
     reducers: {
         login(state,action) {
             state.user = action.payload.user
             state.token = action.payload.token
+            state.wallet = action.payload.wallet
         },
         logout(state,action) {
             state.user = null
             state.token = null
+            state.wallet = null
+        },
+        setWallet(state,action) {
+            state.wallet = action.payload.wallet
+        },
+        setToken(state,action) {
+            state.token = action.payload.token
         }
     }
 })

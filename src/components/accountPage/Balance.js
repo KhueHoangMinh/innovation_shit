@@ -5,11 +5,12 @@ import Close from '@mui/icons-material/Close';
 import CreditCard from '../authPage/register/CreditCard';
 import { TransitionContext } from '../TransitionProvider';
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { green } from '@mui/material/colors';
 import { backend } from '../../constants';
 import Axios from 'axios';
 import { useEffect } from 'react';
+import { authActions } from '../../store/auth-slice';
 
 // Card to display credits card information
 function CardInfo(props) {
@@ -45,6 +46,7 @@ function Balance() {
   // transition effect
   const Transition = useContext(TransitionContext)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // get authentication state from redux
   const authState = useSelector(state => state.auth)
@@ -81,7 +83,7 @@ function Balance() {
   },[wallet])
 
   const callCreateWallet = () => {
-    if(!wallet && authState && authState.token) {
+    if(!authState.wallet && authState && authState.token) {
       Axios.post(backend+'/api/wallet',{},{
         headers: {
           "content-type": "application/json",
@@ -101,13 +103,16 @@ function Balance() {
 
   const confirmWallet = () => {
     setWallet(address)
+    dispatch(authActions.setWallet({
+      wallet: address
+    }))
     setAddress("")
     setKey("")
     setCreateWallet(false)
   }
 
   const purchase = () => {
-    if(wallet && authState && authState.token) {
+    if(authState.wallet && authState && authState.token) {
       Axios.put(backend+'/api/wallet/' + wallet,{amount: amount, private_key: inputKey},{
         headers: {
           "content-type": "application/json",
@@ -121,7 +126,7 @@ function Balance() {
     <>
       <Stack direction={{xs: "column", md: "row"}} spacing={"20px"} sx={{ alignItems: "center", justifyContent: "space-between"}}>
         {
-          wallet ? 
+          authState.wallet ? 
           <>
           <Stack direction={"row"}>
             <Typography variant='h5' sx={{mr: "10px"}}>Total: </Typography>
